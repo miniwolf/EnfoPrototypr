@@ -29,8 +29,8 @@ public class ActionInspectorScript : MonoBehaviour {
 	}
 	/*In case we instantiate the button*/
 	void addButton(GameObject go){
-		go.transform.SetParent (gameObject.transform);
-		go.transform.localScale += new Vector3(1,1,1);
+		go.transform.SetParent (gameObject.transform,true);
+		//go.transform.localScale += new Vector3(1,1,1);
 		buttons.Add (go);
 		
 	}
@@ -42,9 +42,9 @@ public class ActionInspectorScript : MonoBehaviour {
 		//Instantiates the button
 		go=(GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
 		//Sets the button as child of the inspector
-		go.transform.SetParent(transform);
+		go.transform.SetParent(transform,true);
 		//Ehen instantiated, its scale is 0,0,0 default, we correct it
-		go.transform.localScale += new Vector3(1,1,1);
+		//go.transform.localScale += new Vector3(1,1,1);
 		b = go.GetComponent<Button> ();
 		//changes image of the button
 		b.image.sprite = sprite;
