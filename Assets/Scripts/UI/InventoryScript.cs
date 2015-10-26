@@ -1,48 +1,51 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
 
 public class InventoryScript : MonoBehaviour {
-
-	private List<GameObject> items;
-
-
-	void Awake(){
-		items = new List<GameObject> ();
-		Sprite s;
-		s= Resources.Load<Sprite> ("Icons/Weapons_Hammer");
-		addButton (s);
-		addButton (s);
-		addButton (s);
-
-	}
-
-
-
-	/*In case we instantiate the button*/
-	void addButton(GameObject go){
-		go.transform.SetParent (gameObject.transform,true);
-		//go.transform.localScale += new Vector3(1,1,1);
-		items.Add (go);
+	public GameObject [,] buttons;
+	//public GUISkin skin;
+	public int xSlots = 2;
+	public int ySlots = 3;
+	
+	private RectTransform rt;
+	private float iconHeight;
+	private float iconWidth;
+	private float xPos;
+	private float yPos;
+	// Use this for initialization
+	void Awake () {
+		buttons = new GameObject[xSlots,ySlots];
+		rt = gameObject.GetComponent<RectTransform>();
+		iconWidth = rt.rect.width/(xSlots+1);
+		iconHeight = rt.rect.height/(ySlots+1);
+		xPos = gameObject.transform.position.x;
+		yPos = gameObject.transform.position.y;
 		
+		for(int i = 0; i < xSlots; i++){
+			for(int j = 0; j < ySlots; j++){
+				buttons[i,j] = null;
+			}
+		}
+		
+		//test
+		GameObject go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
+		AddButton (go,0,0);
+
+		go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
+		AddButton (go,0,1);
+		go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
+		AddButton (go,1,2);
 	}
 	
-	/*In case we only have the sprite*/
-	void addButton(Sprite sprite){
-		GameObject go;
-		Button b;
-		//Instantiates the button
-		go=(GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		//Sets the button as child of the inspector
-		go.transform.SetParent(transform,true);
-		//then instantiated, its scale is 0,0,0 default, we correct it
+	public void AddButton(GameObject go, int x, int y){
+		if(x < xSlots && y <ySlots && x >=0 && y>=0){
+			buttons[x,y] = go;
+		}
+		RectTransform butRt = go.GetComponent<RectTransform>();
+		go.transform.SetParent(gameObject.transform);
 		go.transform.localScale += new Vector3(1,1,1);
-		b = go.GetComponent<Button> ();
-		//changes image of the button
-		b.image.sprite = sprite;
-		
-		items.Add (go);
-		
+		go.transform.localPosition += new Vector3(iconWidth/1.2f + iconWidth*(x)*1.1f,-iconHeight/1.2f -iconHeight*(y)*1.1f,0f);
+
 	}
+	
 }
