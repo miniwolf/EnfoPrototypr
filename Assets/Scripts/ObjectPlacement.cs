@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class BasePlacement : MonoBehaviour {
+public class ObjectPlacement : MonoBehaviour {
 
-    public GameObject homebase;
+    public GameObject obj;
 
     // Default base position and rotation
     public bool setDefault = true;
@@ -13,20 +13,21 @@ public class BasePlacement : MonoBehaviour {
     public float xRot, yRot, zRot;
 
     void Start () {
-        Invoke("SpawnBase", 0);
+        // Spawns the object instantly
+        Invoke("SpawnObject", 0);
     }
 
-    void SpawnBase()
+    void SpawnObject()
     {
         if (setDefault)
         {
-            Instantiate(homebase, homebase.transform.position, homebase.transform.rotation);
+            Instantiate(obj, obj.transform.position, obj.transform.rotation);
         }
         else
         {
             Vector3 pos = new Vector3(xCoord, yCoord, zCoord);
             Quaternion rot = Quaternion.Euler(xRot, yRot, zRot);
-            Instantiate(homebase, pos, rot);
+            Instantiate(obj, pos, rot);
         }
     }
 }
