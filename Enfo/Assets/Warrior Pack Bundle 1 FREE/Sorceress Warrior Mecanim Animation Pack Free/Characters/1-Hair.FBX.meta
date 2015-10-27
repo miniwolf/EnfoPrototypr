@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: ef85f3cb28fdbf844ae3529144d4c465
-timeCreated: 1445892112
+guid: d6d2bd78ccfd4fe47be4a7e2b58d4c92
+timeCreated: 1445940513
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
@@ -57,8 +57,13 @@ ModelImporter:
     100098: B_R_UpperArm
     100100: B_Spine
     100102: B_Spine1
-    100104: Mesh_Ninja
-    100106: Motion
+    100104: Hair1
+    100106: Hair2
+    100108: Hair3
+    100110: Mesh-Hair
+    100112: Mesh_Sorceress
+    100114: Motion
+    100116: Root
     400000: //RootNode
     400002: B_Head
     400004: B_L_Calf
@@ -111,12 +116,19 @@ ModelImporter:
     400098: B_R_UpperArm
     400100: B_Spine
     400102: B_Spine1
-    400104: Mesh_Ninja
-    400106: Motion
-    4300000: Mesh_Ninja
+    400104: Hair1
+    400106: Hair2
+    400108: Hair3
+    400110: Mesh-Hair
+    400112: Mesh_Sorceress
+    400114: Motion
+    400116: Root
+    4300000: Mesh_Sorceress
+    4300002: Mesh-Hair
     7400000: Take 001
     9500000: //RootNode
-    13700000: Mesh_Ninja
+    13700000: Mesh-Hair
+    13700002: Mesh_Sorceress
   materials:
     importMaterials: 1
     materialName: 0
@@ -130,7 +142,7 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    animationCompression: 0
+    animationCompression: 1
     animationRotationError: .5
     animationPositionError: .5
     animationScaleError: .5
@@ -161,7 +173,7 @@ ModelImporter:
     normalImportMode: 0
     tangentImportMode: 1
   importAnimation: 1
-  copyAvatar: 1
+  copyAvatar: 0
   humanDescription:
     human: []
     skeleton: []
@@ -174,8 +186,7 @@ ModelImporter:
     feetSpacing: 0
     rootMotionBoneName: 
     hasTranslationDoF: 0
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 416f875828b8cf24c9d16f0371a6b7ce,
-    type: 3}
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
   humanoidOversampling: 1
   additionalBone: 0

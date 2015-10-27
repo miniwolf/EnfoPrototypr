@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WarriorAnimationDemoFREE : MonoBehaviour 
+public class WarriorAnimation : MonoBehaviour 
 {
 	public Animator animator;
 
@@ -50,7 +50,6 @@ public class WarriorAnimationDemoFREE : MonoBehaviour
 				StartCoroutine (COStunPause(.6f));
 		}
 
-		UpdateMovement();  //update character position and facing
 	}
 
 	public IEnumerator COStunPause(float pauseTime)
@@ -78,27 +77,6 @@ public class WarriorAnimationDemoFREE : MonoBehaviour
 
 		// Target direction relative to the camera
 		targetDirection = h * right + v * forward;
-	}
-
-	//face character along input direction
-	void RotateTowardMovementDirection()  
-	{
-		if (inputVec != Vector3.zero)
-		{
-			transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(targetDirection), Time.deltaTime * rotationSpeed);
-		}
-	}
-
-	void UpdateMovement()
-	{
-		//get movement input from controls
-		Vector3 motion = inputVec;
-
-		//reduce input for diagonal movement
-		motion *= (Mathf.Abs(inputVec.x) == 1 && Mathf.Abs(inputVec.z) == 1)?.7f:1;
-
-		RotateTowardMovementDirection();  
-		GetCameraRelativeMovement();  
 	}
 
 	void OnGUI () 

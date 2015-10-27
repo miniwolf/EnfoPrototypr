@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 6f47e730cae592342ad7ca8ef6d38f1d
-timeCreated: 1445936618
+guid: 8870e501d8d241045ba4cb4cc79dac94
+timeCreated: 1445940513
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
@@ -56,9 +56,14 @@ ModelImporter:
     100096: B_R_UpperArm
     100098: B_Spine
     100100: B_Spine1
-    100102: //RootNode
-    100104: Mesh_Karate
-    100106: Motion
+    100102: Hair1
+    100104: Hair2
+    100106: Hair3
+    100108: //RootNode
+    100110: Mesh-Hair
+    100112: Mesh_Sorceress
+    100114: Motion
+    100116: Root
     400000: B_Head
     400002: B_L_Calf
     400004: B_L_Clavicle
@@ -110,13 +115,20 @@ ModelImporter:
     400096: B_R_UpperArm
     400098: B_Spine
     400100: B_Spine1
-    400102: //RootNode
-    400104: Mesh_Karate
-    400106: Motion
-    4300000: Mesh_Karate
+    400102: Hair1
+    400104: Hair2
+    400106: Hair3
+    400108: //RootNode
+    400110: Mesh-Hair
+    400112: Mesh_Sorceress
+    400114: Motion
+    400116: Root
+    4300000: Mesh_Sorceress
+    4300002: Mesh-Hair
     7400000: Take 001
     9500000: //RootNode
-    13700000: Mesh_Karate
+    13700000: Mesh-Hair
+    13700002: Mesh_Sorceress
   materials:
     importMaterials: 1
     materialName: 0
@@ -141,14 +153,14 @@ ModelImporter:
       name: Take 001
       takeName: Take 001
       firstFrame: 0
-      lastFrame: 60
+      lastFrame: 100
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       loopTime: 1
-      loopBlend: 0
+      loopBlend: 1
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
@@ -163,7 +175,9 @@ ModelImporter:
       transformMask:
       - path: 
         weight: 1
-      - path: Mesh_Karate
+      - path: Mesh-Hair
+        weight: 1
+      - path: Mesh_Sorceress
         weight: 1
       - path: Motion
         weight: 1
@@ -269,6 +283,14 @@ ModelImporter:
         weight: 1
       - path: Motion/B_Pelvis/B_Spine/B_Spine1/B_R_Clavicle/B_R_UpperArm/B_R_Forearm/B_R_Hand/B_R_Finger4/B_R_Finger41/B_R_Finger42
         weight: 1
+      - path: Root
+        weight: 1
+      - path: Root/Hair1
+        weight: 1
+      - path: Root/Hair1/Hair2
+        weight: 1
+      - path: Root/Hair1/Hair2/Hair3
+        weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
     isReadable: 1
@@ -295,20 +317,20 @@ ModelImporter:
     normalImportMode: 0
     tangentImportMode: 1
   importAnimation: 1
-  copyAvatar: 0
+  copyAvatar: 1
   humanDescription:
     human: []
     skeleton: []
     armTwist: .5
     foreArmTwist: .5
-    upperLegTwist: 1
-    legTwist: 1
-    armStretch: 0
-    legStretch: 0
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
     feetSpacing: 0
     rootMotionBoneName: 
     hasTranslationDoF: 0
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 8645e0506d8d64d44bda3003df478c3e,
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 2d3d6b037a09b944f875bcb93672f874,
     type: 3}
   animationType: 2
   humanoidOversampling: 1
