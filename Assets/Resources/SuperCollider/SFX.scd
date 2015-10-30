@@ -4,7 +4,7 @@
 ~musicVar = Buffer.read(Server.default, "C:/Users/Sindri/gamecourse/EnfoPrototypr/Assets/Resources/SuperCollider/Sound effects/castlevania.wav");
 
 SynthDef(\sampler, {
-	arg out = 0, rate = 1, amp = 0.5, buffer = 0;
+	arg out = [0,1], rate = 1, amp = 0.5, buffer = 0; // Test out = 0
 	var signal;
 
 	signal =
@@ -45,5 +45,6 @@ OSCdef.new(
 // TODO:
 // Sterio sound
 // Various synths / buffers for mixing each audio file
-// Custom SFX
-// Ambients
+// Ambients (From scratch: Wind + maybe rain)
+// Custom SFX (from scratch)
+// Background music (sample and mix??? make from scratch?)
