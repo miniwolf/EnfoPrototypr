@@ -3,8 +3,11 @@
 ~moveVar = Buffer.read(Server.default, "C:/Users/Sindri/gamecourse/EnfoPrototypr/Assets/Resources/SuperCollider/Sound effects/scavengers_footstep1.aif");
 ~musicVar = Buffer.read(Server.default, "C:/Users/Sindri/gamecourse/EnfoPrototypr/Assets/Resources/SuperCollider/Sound effects/castlevania.wav");
 
+// TODO: Switch to OSC branch in Git before working more on this!!!
+// TODO: Make dedicated synthdefs to adjust amp etc...
+// TODO: Try out the wind sound
 SynthDef(\sampler, {
-	arg out = [0,1], rate = 1, amp = 0.5, buffer = 0; // Test out = 0
+	arg rate = 1, amp = 0.5, buffer = 0; // Test out = 0
 	var signal;
 
 	signal =
@@ -13,7 +16,7 @@ SynthDef(\sampler, {
 		doneAction: 2
 	);
 
-	Out.ar(out, signal * amp);
+	Out.ar([0,1], signal * amp);
 }).add;
 
 // MUSIC OSC
@@ -43,7 +46,6 @@ OSCdef.new(
 )
 
 // TODO:
-// Sterio sound
 // Various synths / buffers for mixing each audio file
 // Ambients (From scratch: Wind + maybe rain)
 // Custom SFX (from scratch)

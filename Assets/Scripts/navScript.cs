@@ -8,7 +8,7 @@ public class navScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        //InvokeRepeating("moveOSC", 0, seconds);
+        InvokeRepeating("moveOSC", 0, seconds);
     }
 
     // Update is called once per frame
