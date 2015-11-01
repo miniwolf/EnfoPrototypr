@@ -18,8 +18,9 @@ public class UIManager : MonoBehaviour {
 	public ActionInspectorScript actionInspector;
 
 	// Use this for initialization
-	void Awake () {
+	void Start () {
 		mCamera = mainCamera.GetComponent<Camera>();
+		DeactivateInfo();
 	}
 	
 	// Update is called once per frame
@@ -33,7 +34,20 @@ public class UIManager : MonoBehaviour {
 				name.text = click.getName();
 				picture.sprite = click.getPicure();
 				actionInspector.AddAllButtons(click.getButtons());
+			}else if(Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Ground"))){
+				actionInspector.ResetButtons();
+				DeactivateInfo();
+
 			}
 		}
 	}
+
+
+	void DeactivateInfo(){
+		picture.sprite = Resources.Load<Sprite>("Icons/slot");
+		healthText.text = "0/0";
+		manaText.text = "0/0";
+		name.text = "";
+	}
+
 }

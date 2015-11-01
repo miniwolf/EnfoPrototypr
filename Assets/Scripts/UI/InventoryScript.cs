@@ -13,14 +13,14 @@ public class InventoryScript : MonoBehaviour {
 	private float xPos;
 	private float yPos;
 	// Use this for initialization
-	void Awake () {
+	void Start () {
 		buttons = new GameObject[xSlots,ySlots];
 		rt = gameObject.GetComponent<RectTransform>();
 		iconWidth = rt.rect.width/(xSlots+1);
 		iconHeight = rt.rect.height/(ySlots+1);
 		xPos = gameObject.transform.position.x;
 		yPos = gameObject.transform.position.y;
-		
+		Debug.Log("iconwidth = " + iconWidth + " iconheight = " + iconHeight);
 		for(int i = 0; i < xSlots; i++){
 			for(int j = 0; j < ySlots; j++){
 				buttons[i,j] = null;
@@ -28,6 +28,7 @@ public class InventoryScript : MonoBehaviour {
 		}
 		
 		//test
+
 		GameObject go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
 		AddButton (go,0,0);
 
@@ -43,9 +44,11 @@ public class InventoryScript : MonoBehaviour {
 		}
 		RectTransform butRt = go.GetComponent<RectTransform>();
 		go.transform.SetParent(gameObject.transform);
-		go.transform.localScale += new Vector3(1,1,1);
-		go.transform.localPosition += new Vector3(iconWidth/1.2f + iconWidth*(x)*1.1f,-iconHeight/1.2f -iconHeight*(y)*1.1f,0f);
-
+		go.transform.position = gameObject.transform.position;
+		go.transform.position += new Vector3( rt.rect.width/2, -rt.rect.height/2,0f);
+		//go.transform.localPosition = new Vector3(0f,0f,0f);
+		go.transform.localScale = new Vector3(1,1,1);
+		go.transform.position += new Vector3 (-iconWidth*(2-x), iconHeight*(3-y),0f);
 	}
 	
 }
