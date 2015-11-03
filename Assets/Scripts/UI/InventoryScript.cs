@@ -45,10 +45,13 @@ public class InventoryScript : MonoBehaviour {
 		RectTransform butRt = go.GetComponent<RectTransform>();
 		go.transform.SetParent(gameObject.transform);
 		go.transform.position = gameObject.transform.position;
-		go.transform.position += new Vector3( rt.rect.width/2, -rt.rect.height/2,0f);
+		/*go.transform.position += new Vector3( rt.rect.width/2, -rt.rect.height/2,0f);*/
+		//go.transform.localPosition = gameObject.transform.localPosition;
+
 		//go.transform.localPosition = new Vector3(0f,0f,0f);
 		go.transform.localScale = new Vector3(1,1,1);
-		go.transform.position += new Vector3 (-iconWidth*(2-x), iconHeight*(3-y),0f);
+		//go.transform.position += new Vector3 (-iconWidth*(2-x), iconHeight*(3-y),0f);
+		go.transform.localPosition += new Vector3 (-iconWidth * (0.5f - x),iconHeight * (1f - y) ,0);
 	}
 	
 }

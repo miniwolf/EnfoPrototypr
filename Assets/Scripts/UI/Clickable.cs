@@ -7,6 +7,10 @@ public class Clickable : MonoBehaviour {
 	protected int currentHealth;
 	protected int maxMana;
 	protected int currentMana;
+	protected int maxExp;
+	protected int currentExp;
+	protected int maxLevel;
+	protected int currentLevel;
 
 	protected string name;
 	protected Sprite picture;
@@ -33,6 +37,18 @@ public class Clickable : MonoBehaviour {
 	}
 	public GameObject[,] getButtons(){
 		return buttons;
+	}
+	public int getMaxExp(){
+		return maxExp;
+	}
+	public int getCurrentExp(){
+		return currentExp;
+	}
+	public int getCurrentLevel(){
+		return currentLevel;
+	}
+	public int getMaxLevel(){
+		return maxLevel;
 	}
 
 }
