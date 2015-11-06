@@ -1,11 +1,9 @@
 (
-
-~moveVar = Buffer.read(Server.default, "C:/Users/Sindri/gamecourse/EnfoPrototypr/Assets/Resources/SuperCollider/Sound effects/scavengers_footstep1.aif");
 ~musicVar = Buffer.read(Server.default, "C:/Users/Sindri/gamecourse/EnfoPrototypr/Assets/Resources/SuperCollider/Sound effects/castlevania.wav");
+~windVar = Buffer.read(Server.default, "C:/Users/Sindri/gamecourse/EnfoPrototypr/Assets/Resources/SuperCollider/Sound effects/wind.wav");
+)
 
-// TODO: Switch to OSC branch in Git before working more on this!!!
-// TODO: Make dedicated synthdefs to adjust amp etc...
-// TODO: Try out the wind sound
+(
 SynthDef(\sampler, {
 	arg rate = 1, amp = 0.5, buffer = 0; // Test out = 0
 	var signal;
@@ -18,7 +16,9 @@ SynthDef(\sampler, {
 
 	Out.ar([0,1], signal * amp);
 }).add;
+)
 
+(
 // MUSIC OSC
 OSCdef.new(
 \music,
@@ -31,22 +31,23 @@ OSCdef.new(
 	nil, 57120
 );
 
-// MOVE OSC
+// WIND OSC
 OSCdef.new(
-\move,
+\wind,
 	{arg msg;
 		[msg].postln;
 
-		Synth(\sampler, [\buffer, ~moveVar]);
+		Synth(\sampler, [\buffer, ~windVar]);
 	},
-	'/move',
+	'/wind',
 	nil, 57120
 );
-
 )
 
+
+
 // TODO:
-// Various synths / buffers for mixing each audio file
-// Ambients (From scratch: Wind + maybe rain)
-// Custom SFX (from scratch)
-// Background music (sample and mix??? make from scratch?)
+// Ambient: Wind, rain
+// SFX: Player wounded, enemy wounded, player swing sword, enemy swing sword
+// Voice acting?
+// Background music: make medieval score
