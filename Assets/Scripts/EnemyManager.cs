@@ -5,13 +5,14 @@ public class EnemyManager : MonoBehaviour {
     public GameObject enemy;
     public float spawnTime = 3f;
     public Transform[] spawnPoints;
+    public float waveTime = 90f;
 
+    public int counter = 0;
 
     void Start()
     {
         InvokeRepeating("Spawn", spawnTime, spawnTime);
     }
-
 
     void Spawn()
     {

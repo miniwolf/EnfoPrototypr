@@ -1,6 +1,8 @@
 // RECORD WIND
-(
+~durationSeconds = 10.0;
+~frequency = 440;
 
+(
 SynthDef.new(\wind, { |freq, duration|
 	var sig;
 
@@ -18,9 +20,6 @@ SynthDef(\recordTone, { |buffer|
 )
 
 (
-var durationSeconds = 10.0;
-var frequency = 440;
-
 Routine({
     var recordfn = { |freq, duration|
         var server = Server.local;
@@ -43,7 +42,7 @@ Routine({
         );
     };
 
-    recordfn.value(frequency,durationSeconds);
+    recordfn.value(~frequency, ~durationSeconds);
 }).next
 )
 
