@@ -10,6 +10,12 @@ public class ShopClickable : Clickable {
 		currentMana = 0;
 		currentHealth = 999;
 		name = "Item Shop";
+		className = "Shop building";
+		currentLevel = 1;
+		maxLevel = 1;
+		currentExp = 0;
+		maxExp = 100;
+
 		picture = Resources.Load<Sprite>("Icons/dragon");
 		buttons = new GameObject[4,3];
 		buttons[0,0] = (GameObject) GameObject.Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);

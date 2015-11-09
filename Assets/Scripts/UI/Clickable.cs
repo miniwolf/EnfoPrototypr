@@ -13,10 +13,14 @@ public class Clickable : MonoBehaviour {
 	protected int currentLevel;
 
 	protected string name;
+	protected string className;
 	protected Sprite picture;
 	protected GameObject [,] buttons;
 
 
+	public string getClassName(){
+		return className;
+	}
 	public int getMaxHealth(){
 		return maxHealth;
 	}

@@ -9,6 +9,12 @@ public class EnemyClickable : Clickable {
 		currentMana = 66;
 		currentHealth = 97;
 		name = "Arthas";
+		className = "Fighter";
+		currentLevel = 2;
+		maxLevel = 10;
+		currentExp = 58;
+		maxExp = 100;
+
 		picture = Resources.Load<Sprite>("Icons/arthas");
 		buttons = new GameObject[4,3];
 		buttons[0,0] = (GameObject) GameObject.Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);

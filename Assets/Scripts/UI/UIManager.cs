@@ -12,7 +12,10 @@ public class UIManager : MonoBehaviour {
 	public Text healthText;
 	public Text manaText;
 	public Text name;
+	public Text levelAndClassText;
 	public Image picture;
+
+	public Slider experienceBar;
 
 	public GameObject mainCamera;
 	public ActionInspectorScript actionInspector;
@@ -36,6 +39,10 @@ public class UIManager : MonoBehaviour {
 				name.text = click.getName();
 				picture.sprite = click.getPicure();
 				actionInspector.AddAllButtons(click.getButtons());
+
+				experienceBar.maxValue = click.getMaxExp();
+				experienceBar.value = click.getCurrentExp();
+				levelAndClassText.text = "Level " +click.getCurrentLevel() + " " + click.getClassName();
 			}
 		}
 	}
@@ -47,6 +54,8 @@ public class UIManager : MonoBehaviour {
 		healthText.text = "0/0";
 		manaText.text = "0/0";
 		name.text = "";
+		levelAndClassText.text = "";
+		experienceBar.value = 0;
 	}
 
 }
