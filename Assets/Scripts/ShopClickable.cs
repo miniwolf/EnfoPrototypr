@@ -18,45 +18,29 @@ public class ShopClickable : Clickable {
 
 		picture = Resources.Load<Sprite>("Icons/dragon");
 		buttons = new GameObject[4,3];
-		buttons[0,0] = (GameObject) GameObject.Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		buttons[0,0].GetComponent<Image>().sprite = Resources.Load<Sprite>("Icons/knife");
-		buttons[0,0].SetActive(false);
+		buttons[0,0] = instantiateButton("Icons/knife", "A very strong kife, +15 attack");
 		
-		buttons[0,1] = (GameObject) GameObject.Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		buttons[0,1].GetComponent<Image>().sprite = Resources.Load<Sprite>("Icons/helmet");
-		buttons[0,1].SetActive(false);
+		buttons[0,1] = instantiateButton("Icons/helmet", "A leather helmet which gives +10 damage protection");
 		
-		buttons[0,2] = (GameObject) GameObject.Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		buttons[0,2].GetComponent<Image>().sprite = Resources.Load<Sprite>("Icons/axe");
-		buttons[0,2].SetActive(false);
+		buttons[0,2] = instantiateButton("Icons/axe", "A really cool but useless axe, -1 attack");
 		
-		buttons[1,0] = (GameObject) GameObject.Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		buttons[1,0].GetComponent<Image>().sprite = Resources.Load<Sprite>("Icons/pants");
-		buttons[1,0].SetActive(false);
+		buttons[1,0] = instantiateButton("Icons/pants", "Some pants, to not go naked");
 		
-		buttons[1,1] = (GameObject) GameObject.Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		buttons[1,1].SetActive(false);
+		buttons[1,1] = instantiateButton("Icons/shield", "A shield could come in handy, +10 defense");
 		
-		buttons[1,2] = (GameObject) GameObject.Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		buttons[1,2].SetActive(false);
+		buttons[1,2] = instantiateButton("Icons/torso", "specially useful if you have a torso, +10 defense");
 		
-		buttons[2,0] = (GameObject) GameObject.Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		buttons[2,0].SetActive(false);
+		buttons[2,0] = instantiateButton("Icons/Weapons_Sword", "a normal sword +10 attack");
 		
-		buttons[2,1] = (GameObject) GameObject.Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		buttons[2,1].SetActive(false);
+		buttons[2,1] = instantiateButton("Icons/Weapons_Sword", "a normal sword +10 attack");
 		
-		buttons[2,2] = (GameObject) GameObject.Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		buttons[2,2].SetActive(false);
+		buttons[2,2] = instantiateButton("Icons/Weapons_Sword", "a normal sword +10 attack");
 		
-		buttons[3,0] = (GameObject) GameObject.Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		buttons[3,0].SetActive(false);
+		buttons[3,0] = instantiateButton("Icons/Weapons_Sword", "a normal sword +10 attack");
 		
-		buttons[3,1] = (GameObject) GameObject.Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		buttons[3,1].SetActive(false);
+		buttons[3,1] = instantiateButton("Icons/Weapons_Sword", "a normal sword +10 attack");
 		
-		buttons[3,2] = (GameObject) GameObject.Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		buttons[3,2].SetActive(false);
+		buttons[3,2] = instantiateButton("Icons/Weapons_Sword", "a normal sword +10 attack");
 		
 	}
 }

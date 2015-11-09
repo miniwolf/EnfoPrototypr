@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Clickable : MonoBehaviour {
 
@@ -53,6 +54,14 @@ public class Clickable : MonoBehaviour {
 	}
 	public int getMaxLevel(){
 		return maxLevel;
+	}
+
+	public GameObject instantiateButton(string resourcesPathToIcon, string description){
+		GameObject go =(GameObject) GameObject.Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
+		go.GetComponent<Image>().sprite = Resources.Load<Sprite>(resourcesPathToIcon);
+		go.GetComponent<ActionButtonScript>().setDescription(description);
+		go.SetActive(false);
+		return go;
 	}
 
 }
