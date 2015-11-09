@@ -6,7 +6,7 @@ public class countDownTimer : MonoBehaviour {
     public float timeRemaining = 60;
     public Text waveText;
     private int waveCount = 1;
-    private bool isPause = false;
+    public static bool isSpawning = false;
 
 	// Use this for initialization
 	void Start () {
@@ -17,14 +17,14 @@ public class countDownTimer : MonoBehaviour {
     {
         timeRemaining -= Time.deltaTime;
 
-        switch(isPause) 
+        switch(isSpawning) 
         {
             case true:
                 if(timeRemaining > 0)
                     waveText.text = "Next wave in " + timeRemaining.ToString("0");
                 else
                 {
-                    isPause = false;
+                    isSpawning = false;
                     timeRemaining = 60;
                 }
                 break;
@@ -33,7 +33,7 @@ public class countDownTimer : MonoBehaviour {
                     waveText.text = "Wave " + waveCount + ": " + timeRemaining.ToString("0");
                 else
                 {
-                    isPause = true;
+                    isSpawning = true;
                     waveCount++;
                     timeRemaining = 30;
                 }
