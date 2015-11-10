@@ -33,9 +33,12 @@ public class UIManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetMouseButton(0)){
+		if(Input.GetMouseButtonUp(0)){
 			this.ray = mCamera.ScreenPointToRay(Input.mousePosition);
 			if(Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Clickable"))){
+				if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()){
+					return;
+				}
 				DeactivateInfo();
 				actionInspector.ResetButtons();
 				click = hit.transform.gameObject.GetComponent<Clickable>();
@@ -48,10 +51,9 @@ public class UIManager : MonoBehaviour {
 				experienceBar.maxValue = click.getMaxExp();
 				experienceBar.value = click.getCurrentExp();
 				levelAndClassText.text = "Level " +click.getCurrentLevel() + " " + click.getClassName();
-			}
-		}//else if(){
 
-		//}
+			}
+		}
 	}
 
 	public static void showDescription(string desc){
