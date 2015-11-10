@@ -31,7 +31,7 @@ public class WarriorAnimation : MonoBehaviour
 			// destination to the point where the click occurred.
 			var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			
-			if (Physics.Raycast(ray, out hit)) {
+			if ( Physics.Raycast(ray, out hit) ) {
 				agent.SetDestination(hit.point);
 				goalPosition = hit.point;
 				animator.SetBool("Moving", true);
@@ -63,15 +63,5 @@ public class WarriorAnimation : MonoBehaviour
 
 	public IEnumerator COStunPause(float pauseTime) {
 		yield return new WaitForSeconds(pauseTime);
-	}
-
-	void OnGUI() {
-		if ( GUI.Button(new Rect (25, 85, 100, 30), "Attack1") ) {
-			animator.SetTrigger("Attack1Trigger");
-			if (warrior == Warrior.Brute || warrior == Warrior.Sorceress)  //if character is Brute or Sorceress
-				StartCoroutine (COStunPause(1.2f));
-			else
-				StartCoroutine (COStunPause(.6f));
-		}
 	}
 }
