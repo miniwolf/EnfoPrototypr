@@ -5,7 +5,6 @@ public class EnemyManager : MonoBehaviour {
     public GameObject enemy;
     public float spawnTime = 3f;
     public Transform[] spawnPoints;
-    public float waveTime = 90f;
     private bool callStart = false;
 
     void Start()
@@ -18,14 +17,14 @@ public class EnemyManager : MonoBehaviour {
         switch(callStart)
         {
             case true:
-                if(!countDownTimer.isSpawning)
+                if(countDownTimer.isSpawning)
                 {
                     callStart = false;
                     Start();
                 }
                 break;
             case false:
-                if(countDownTimer.isSpawning)
+                if(!countDownTimer.isSpawning)
                 {
                     callStart = true;
                     CancelInvoke();
