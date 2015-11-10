@@ -27,7 +27,7 @@ public class UIManager : MonoBehaviour {
 	void Start () {
 		mCamera = mainCamera.GetComponent<Camera>();
 		itemDescriptionPanel = GameObject.Find("ButtonDescriptionPanel");
-		itemDescriptionText = GameObject.Find("ItemDescriptionText").GetComponent<Text>();
+		itemDescriptionText = GameObject.Find("ButtonDescriptionText").GetComponent<Text>();
 		DeactivateInfo();
 	}
 	
