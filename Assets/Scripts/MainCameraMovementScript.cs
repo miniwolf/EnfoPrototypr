@@ -7,6 +7,20 @@ public class MainCameraMovementScript : MonoBehaviour {
 	private float speed2 = 85.0f;
 	void Update()
 	{
+		Debug.Log(Input.mousePosition);
+
+		if(Input.mousePosition.x < 30){
+			transform.position += new Vector3(0,0,speed * Time.deltaTime);
+		}
+		if(Input.mousePosition.x > Screen.width -30){
+			transform.position -= new Vector3(0,0,speed * Time.deltaTime);
+		}
+		if(Input.mousePosition.y < 30){
+			transform.position -= new Vector3(speed * Time.deltaTime,0,0);
+		}
+		if(Input.mousePosition.y > Screen.height -30){
+			transform.position += new Vector3(speed * Time.deltaTime,0,0);
+		}
 		if(Input.GetKey(KeyCode.UpArrow))
 		{
 			transform.position += new Vector3(speed * Time.deltaTime,0,0);
@@ -24,7 +38,6 @@ public class MainCameraMovementScript : MonoBehaviour {
 			transform.position -= new Vector3(0,0,speed * Time.deltaTime);
 		}
 
-
 		if (Input.GetAxis("Mouse ScrollWheel") < 0f ) // forward
 		{
 			if(transform.position.y < 75){
@@ -32,7 +45,7 @@ public class MainCameraMovementScript : MonoBehaviour {
 			}
 		}
 
-		else if (Input.GetAxis("Mouse ScrollWheel") > 0f ) // backwards
+		if (Input.GetAxis("Mouse ScrollWheel") > 0f ) // backwards
 		{
 			if(transform.position.y > 25){
 				transform.position -= new Vector3(0,speed2 * Time.deltaTime,0);
