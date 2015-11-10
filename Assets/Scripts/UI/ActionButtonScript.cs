@@ -4,12 +4,8 @@ using UnityEngine.UI;
 
 public class ActionButtonScript : MonoBehaviour {
 
-	private string description;
-
-	void Start(){
-		description = "Hola soy la descripcion de este item muchas gracias!";
-	}
-
+	private string description  = "test";
+	
 	public void setDescription(string desc){
 		description = desc;
 	}
