@@ -2,10 +2,10 @@
 using System.Collections;
 
 public class InventoryScript : MonoBehaviour {
-	public GameObject [,] buttons;
+	private GameObject [,] buttons;
 	//public GUISkin skin;
-	public int xSlots = 2;
-	public int ySlots = 3;
+	private const int xSlots = 2;
+	private const int ySlots = 3;
 	
 	private RectTransform rt;
 	private float iconHeight;
@@ -31,11 +31,11 @@ public class InventoryScript : MonoBehaviour {
 
 		GameObject go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
 		AddButton (go,0,0);
-
+		/*
 		go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
 		AddButton (go,0,1);
 		go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		AddButton (go,1,2);
+		AddButton (go,1,2);*/
 	}
 	
 	public void AddButton(GameObject go, int x, int y){
@@ -53,5 +53,23 @@ public class InventoryScript : MonoBehaviour {
 		//go.transform.position += new Vector3 (-iconWidth*(2-x), iconHeight*(3-y),0f);
 		go.transform.localPosition += new Vector3 (-iconWidth * (0.5f - x),iconHeight * (1f - y) ,0);
 	}
-	
+
+	/*Adds a button in the first open positioni of the inventory*/
+	public bool AddButton(GameObject button){
+		for(int i = 0; i < ySlots; i++){
+			for(int j = 0; j < xSlots; j++){
+				if(buttons[j,i] == null){
+					AddButton(button,j,i);
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public void removeButton(int x, int y){
+		Destroy(buttons[x,y]);
+		buttons[x,y] = null;
+	}
+
 }

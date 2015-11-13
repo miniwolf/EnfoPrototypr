@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour {
 	public Text manaText;
 	public Text name;
 	public Text levelAndClassText;
+	public static Text gold;
 	public Image picture;
 
 	public Slider experienceBar;
@@ -22,18 +23,21 @@ public class UIManager : MonoBehaviour {
 
 	public GameObject mainCamera;
 	public ActionInspectorScript actionInspector;
+	public static InventoryScript inventory;
 
 	// Use this for initialization
 	void Start () {
 		mCamera = mainCamera.GetComponent<Camera>();
 		itemDescriptionPanel = GameObject.Find("ButtonDescriptionPanel");
 		itemDescriptionText = GameObject.Find("ButtonDescriptionText").GetComponent<Text>();
+		inventory = GameObject.Find("InventoryPanel").GetComponent<InventoryScript>();
+		gold = GameObject.Find("GoldText").GetComponent<Text>();
 		DeactivateInfo();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetMouseButtonUp(0)){
+		if(Input.GetMouseButton(0)){
 			this.ray = mCamera.ScreenPointToRay(Input.mousePosition);
 			if(Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Clickable"))){
 				if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()){
@@ -64,6 +68,19 @@ public class UIManager : MonoBehaviour {
 	public static void stopShowDescription(){
 		itemDescriptionPanel.SetActive(false);
 		itemDescriptionText.text = "";
+	}
+
+	public static void addButtonToInventory(GameObject button,int price){
+		int actualGold = int.Parse(gold.text);
+		if(price <=  actualGold){
+			inventory.AddButton(button);
+			gold.text = (actualGold-price).ToString();
+		}else{
+			Destroy(button);
+		}
+	}
+	public static void removeButtonFromInventory(int x, int y){
+		inventory.removeButton(x,y);
 	}
 
 	public void DeactivateInfo(){

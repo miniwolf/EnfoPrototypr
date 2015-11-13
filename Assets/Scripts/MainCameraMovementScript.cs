@@ -23,7 +23,7 @@ public class MainCameraMovementScript : MonoBehaviour {
 		if(Input.mousePosition.x > Screen.width -30){
 			transform.position -= new Vector3(0,0,speed * Time.deltaTime);
 		}
-		if(Input.mousePosition.y < 30){
+		if(Input.mousePosition.y < 10){
 			transform.position -= new Vector3(speed * Time.deltaTime,0,0);
 		}
 		if(Input.mousePosition.y > Screen.height -30){

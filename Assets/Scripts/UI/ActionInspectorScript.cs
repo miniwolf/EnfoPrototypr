@@ -27,35 +27,6 @@ public class ActionInspectorScript : MonoBehaviour {
 				buttons[i,j] = null;
 			}
 		}
-
-		//test
-		//GameObject go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		//AddButton (go,0,0);
-		/*go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		AddButton (go,0,1);
-		go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		AddButton (go,0,2);*/
-		/*
-		go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		AddButton (go,1,0);
-		go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		AddButton (go,1,1);
-		go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		AddButton (go,1,2);
-*/
-		/*go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		AddButton (go,2,0);
-		go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		AddButton (go,2,1);
-		go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		AddButton (go,2,2);
-
-		go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		AddButton (go,3,0);
-		go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		AddButton (go,3,1);*/
-		//go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
-		//sAddButton (go,3,2);
 	}
 
 	public void AddButton(GameObject go, int x, int y){
@@ -76,6 +47,10 @@ public class ActionInspectorScript : MonoBehaviour {
 	}	
 
 	public void AddAllButtons(GameObject[,] array){
+		if(array == null){
+			/*it happens with enemies*/
+			return;
+		}
 		for(int i = 0; i < xSlots; i++){
 			for(int j = 0; j < ySlots; j++){
 				AddButton(array[i,j],i,j);
