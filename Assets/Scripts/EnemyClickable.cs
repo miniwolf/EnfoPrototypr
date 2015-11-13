@@ -16,8 +16,8 @@ public class EnemyClickable : Clickable {
 		maxExp = 100;
 
 		picture = Resources.Load<Sprite>("Icons/arthas");
-		buttons = new GameObject[4,3];
-		buttons[0,0] = instantiateButton("Icons/Weapons_Sword", "a normal sword +10 attack");
+		buttons = null; //enemies do not have buttons
+		/*buttons[0,0] = instantiateButton("Icons/Weapons_Sword", "a normal sword +10 attack",false);
 
 		buttons[0,1] = instantiateButton("Icons/Weapons_Sword", "a normal sword +10 attack");
 
@@ -39,7 +39,7 @@ public class EnemyClickable : Clickable {
 
 		buttons[3,1] = instantiateButton("Icons/Weapons_Sword", "a normal sword +10 attack");
 
-		buttons[3,2] = instantiateButton("Icons/Weapons_Sword", "a normal sword +10 attack");
+		buttons[3,2] = instantiateButton("Icons/Weapons_Sword", "a normal sword +10 attack");*/
 
 
 	}

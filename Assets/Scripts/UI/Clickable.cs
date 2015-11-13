@@ -56,10 +56,18 @@ public class Clickable : MonoBehaviour {
 		return maxLevel;
 	}
 
-	public GameObject instantiateButton(string resourcesPathToIcon, string description){
+	public GameObject instantiateButton(string resourcesPathToIcon, string description, bool isInShop, int price = 0){
 		GameObject go =(GameObject) GameObject.Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
 		go.GetComponent<Image>().sprite = Resources.Load<Sprite>(resourcesPathToIcon);
-		go.GetComponent<ActionButtonScript>().setDescription(description);
+		ActionButtonScript actionButtonScript = go.GetComponent<ActionButtonScript>();
+		if(isInShop){
+			string newDescription = "Price: "+ price.ToString() + ". " + description;
+			actionButtonScript.setDescription(newDescription);
+		}else{
+			actionButtonScript.setDescription(description);
+		}
+		actionButtonScript.setIsInShopButton(isInShop);
+		actionButtonScript.setPrice(price);
 		go.SetActive(false);
 		return go;
 	}
