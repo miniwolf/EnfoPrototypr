@@ -5,10 +5,18 @@ public class MainCameraMovementScript : MonoBehaviour {
 
 	private float speed = 100.0f;
 	private float speed2 = 85.0f;
+	private Vector3 mousePosition;
 	void Update()
 	{
-		Debug.Log(Input.mousePosition);
 
+		/*Camera movement with middle mouse button*/
+		if (Input.GetMouseButtonDown(2)){
+			mousePosition = Input.mousePosition;
+		}
+		if(Input.GetMouseButton(2)){
+			transform.position += new Vector3((Input.mousePosition.y - mousePosition.y)*Time.deltaTime,0,(mousePosition.x-Input.mousePosition.x)*Time.deltaTime );
+		}
+		/*Camera movement with mouse movement*/
 		if(Input.mousePosition.x < 30){
 			transform.position += new Vector3(0,0,speed * Time.deltaTime);
 		}
@@ -21,6 +29,8 @@ public class MainCameraMovementScript : MonoBehaviour {
 		if(Input.mousePosition.y > Screen.height -30){
 			transform.position += new Vector3(speed * Time.deltaTime,0,0);
 		}
+
+		/*Camera movement with direction keys*/
 		if(Input.GetKey(KeyCode.UpArrow))
 		{
 			transform.position += new Vector3(speed * Time.deltaTime,0,0);
@@ -38,6 +48,8 @@ public class MainCameraMovementScript : MonoBehaviour {
 			transform.position -= new Vector3(0,0,speed * Time.deltaTime);
 		}
 
+
+		/*Camera zoom with mouse wheel*/
 		if (Input.GetAxis("Mouse ScrollWheel") < 0f ) // forward
 		{
 			if(transform.position.y < 75){
