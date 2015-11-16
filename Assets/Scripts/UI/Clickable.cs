@@ -4,7 +4,6 @@ using UnityEngine.UI;
 using System;
 
 public class Clickable : MonoBehaviour {
-
 	protected int maxHealth;
 	protected int currentHealth;
 	protected int maxMana;
@@ -14,49 +13,60 @@ public class Clickable : MonoBehaviour {
 	protected int maxLevel;
 	protected int currentLevel;
 
-	protected string name;
+	protected string characterName;
 	protected string className;
 	protected Sprite picture;
 	protected GameObject [,] buttons;
 
-	public string getClassName(){
+	public string getClassName() {
 		return className;
 	}
-	public int getMaxHealth(){
+
+	public int getMaxHealth() {
 		return maxHealth;
 	}
-	public int getCurrentHealth(){
+
+	public int getCurrentHealth() {
 		return currentHealth;
 	}
-	public int getMaxMana(){
+
+	public int getMaxMana() {
 		return maxMana;
 	}
-	public int getCurrentMana(){
+
+	public int getCurrentMana() {
 		return currentMana;
 	}
-	public string getName(){
-		return name;
+
+	public string getName() {
+		return characterName;
 	}
-	public Sprite getPicure(){
+
+	public Sprite getPicure() {
 		return picture;
 	}
-	public GameObject[,] getButtons(){
+
+	public GameObject[,] getButtons() {
 		return buttons;
 	}
-	public int getMaxExp(){
+
+	public int getMaxExp() {
 		return maxExp;
 	}
-	public int getCurrentExp(){
+
+	public int getCurrentExp() {
 		return currentExp;
 	}
-	public int getCurrentLevel(){
+
+	public int getCurrentLevel() {
 		return currentLevel;
 	}
-	public int getMaxLevel(){
+
+	public int getMaxLevel() {
 		return maxLevel;
 	}
 
-	public GameObject instantiateButton(string resourcesPathToIcon, string description, bool isActionButton, Func<GameObject,bool> action, long price){
+	public GameObject instantiateButton(string resourcesPathToIcon, string description, bool isActionButton, Func<GameObject,bool> action, long price) {
 		GameObject go =(GameObject) GameObject.Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
 		go.GetComponent<Image>().sprite = Resources.Load<Sprite>(resourcesPathToIcon);
 		ActionButtonScript actionButtonScript = go.GetComponent<ActionButtonScript>();
@@ -76,10 +86,9 @@ public class Clickable : MonoBehaviour {
 	}
 
 	/*Here there will be functions which the buttons can have*/
-	public static bool totalBaseRepair(GameObject button){
+	public static bool totalBaseRepair(GameObject button) {
 		UIManager.setBaseHealthText("Base: 30/30");
 		UIManager.removeButtonFromInventory(button);
 		return true;
 	}
-
 }

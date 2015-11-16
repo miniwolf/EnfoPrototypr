@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -10,7 +10,7 @@ public class ShopClickable : Clickable {
 		maxHealth = 1000;
 		currentMana = 0;
 		currentHealth = 999;
-		name = "Item Shop";
+		characterName = "Item Shop";
 		className = "Shop building";
 		currentLevel = 1;
 		maxLevel = 1;
