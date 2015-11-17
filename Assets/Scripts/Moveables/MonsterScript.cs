@@ -54,7 +54,6 @@ public class MonsterScript : MonoBehaviour {
 		if ( from == to ) {
 			return;
 		}
-		Debug.Log(to);
 		state = to;
 
 		switch(from) {

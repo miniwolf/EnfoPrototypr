@@ -4,6 +4,12 @@ using System.Collections;
 public class WarriorAnimation : Clickable {
 	public Animator animator;
 	private NavMeshAgent agent;
+	enum States {
+		ATTACKING,
+		IDLE,
+		CHASING
+	}
+	private States state = States.IDLE;
 
 	//Warrior types
 	public enum Warrior{Karate, Ninja, Brute, Sorceress};
@@ -15,10 +21,6 @@ public class WarriorAnimation : Clickable {
 	void Start() {
 		agent = gameObject.GetComponent<NavMeshAgent>();
 		goalPosition = gameObject.transform.position;
-	}
-
-	public bool V3Equal(Vector3 a, Vector3 b) {
-		return Vector3.SqrMagnitude(a - b) < 0.00695;
 	}
 	
 	void Update() {
@@ -39,5 +41,13 @@ public class WarriorAnimation : Clickable {
 			//character is not moving
 			animator.SetBool("Running", false);
 		}
+
+		if ( Input.GetKeyUp("A") ) {
+			state = States.ATTACKING;
+		}
+	}
+
+	private bool V3Equal(Vector3 a, Vector3 b) {
+		return Vector3.SqrMagnitude(a - b) < 0.00695;
 	}
 }
