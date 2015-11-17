@@ -24,6 +24,8 @@ public class GameOverManager : MonoBehaviour {
         if(gameOver && (Application.loadedLevel != 0 || Application.loadedLevel != 1))
         {
             Application.LoadLevel("gameOver");
+            // TODO: Bæta við restart hnappi
+            // Sýna í leik þegar target missir líf
         }
 	}
 
@@ -33,6 +35,7 @@ public class GameOverManager : MonoBehaviour {
         {
             targetLife -= 1;
             Destroy(col.collider.gameObject);
+            Debug.Log(targetLife);
         }
     }
 }

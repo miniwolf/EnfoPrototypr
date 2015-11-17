@@ -41,4 +41,9 @@ public class MenuScript : MonoBehaviour {
         Application.Quit();
     }
 
+    public void RestartGame()
+    {
+        Application.LoadLevel(1);
+    }
+
 }
