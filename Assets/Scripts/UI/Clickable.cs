@@ -66,7 +66,7 @@ public class Clickable : MonoBehaviour {
 		}else{
 			actionButtonScript.setDescription(description);
 		}
-		actionButtonScript.setIsInShopButton(isInShop);
+		actionButtonScript.setIsInShop(isInShop);
 		actionButtonScript.setPrice(price);
 		go.SetActive(false);
 		return go;
