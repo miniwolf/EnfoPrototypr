@@ -60,9 +60,24 @@ public class UIManager : MonoBehaviour {
 		}
 	}
 
-	public static void showDescription(string desc){
+	public static void showDescription(string desc, bool isActionButton, long price){
 		itemDescriptionPanel.SetActive(true);
-		itemDescriptionText.text = desc;
+		//Debug.Log("isinshop = " + isInShop + "; isininventory = " + isInInventory);
+		if(!isActionButton){
+			itemDescriptionText.text = "Price: " + price + ". " + desc;
+		}else{
+			itemDescriptionText.text = desc;
+		}
+
+	}
+
+	public static long getGold(){
+		return long.Parse(gold.text);
+	}
+
+	public static void sellForPrice(long price){
+		long result = long.Parse(gold.text)+price;
+		gold.text = "" + result;
 	}
 
 	public static void stopShowDescription(){
@@ -70,17 +85,13 @@ public class UIManager : MonoBehaviour {
 		itemDescriptionText.text = "";
 	}
 
-	public static void addButtonToInventory(GameObject button,int price){
+	public static void addButtonToInventory(GameObject button, long price){
 		int actualGold = int.Parse(gold.text);
-		if(price <=  actualGold){
-			inventory.AddButton(button);
-			gold.text = (actualGold-price).ToString();
-		}else{
-			Destroy(button);
-		}
+		inventory.AddButton(button);
+		gold.text = (actualGold-price).ToString();
 	}
-	public static void removeButtonFromInventory(int x, int y){
-		inventory.removeButton(x,y);
+	public static void removeButtonFromInventory(GameObject button){
+		inventory.removeButton(button);
 	}
 
 	public void DeactivateInfo(){
