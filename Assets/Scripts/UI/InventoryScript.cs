@@ -12,6 +12,8 @@ public class InventoryScript : MonoBehaviour {
 	private float iconWidth;
 	private float xPos;
 	private float yPos;
+
+	private bool isFull = false;
 	// Use this for initialization
 	void Start () {
 		buttons = new GameObject[xSlots,ySlots];
@@ -56,6 +58,9 @@ public class InventoryScript : MonoBehaviour {
 
 	/*Adds a button in the first open positioni of the inventory*/
 	public bool AddButton(GameObject button){
+		if(isFull){
+			return false;
+		}
 		for(int i = 0; i < ySlots; i++){
 			for(int j = 0; j < xSlots; j++){
 				if(buttons[j,i] == null){
@@ -64,6 +69,7 @@ public class InventoryScript : MonoBehaviour {
 				}
 			}
 		}
+		isFull = true;
 		return false;
 	}
 
@@ -77,6 +83,7 @@ public class InventoryScript : MonoBehaviour {
 			for(int j = 0; j < ySlots; j++){
 				if(buttons[i,j] == button){
 					removeButton(i,j);
+					isFull = false;
 					return;
 				}
 			}

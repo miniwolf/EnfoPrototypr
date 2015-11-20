@@ -62,10 +62,9 @@ public class ActionButtonScript : MonoBehaviour {
 					actionButtonScript.setIsActionButton(false);
 					UIManager.addButtonToInventory(newButton,price);
 				}
-
-				}else{
-					//do action
-				}
+			}else{
+				//do action
+			}
 		}else if(Input.GetMouseButtonUp(1)){//right click
 			sellBack();
 		}
