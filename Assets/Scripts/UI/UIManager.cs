@@ -87,8 +87,11 @@ public class UIManager : MonoBehaviour {
 
 	public static void addButtonToInventory(GameObject button, long price){
 		int actualGold = int.Parse(gold.text);
-		inventory.AddButton(button);
-		gold.text = (actualGold-price).ToString();
+		if(inventory.AddButton(button)){
+			gold.text = (actualGold-price).ToString();
+		}else{
+			Destroy(button);
+		}
 	}
 	public static void removeButtonFromInventory(GameObject button){
 		inventory.removeButton(button);
