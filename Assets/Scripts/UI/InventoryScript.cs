@@ -72,4 +72,15 @@ public class InventoryScript : MonoBehaviour {
 		buttons[x,y] = null;
 	}
 
+	public void removeButton(GameObject button){
+		for(int i = 0; i < xSlots; i++){
+			for(int j = 0; j < ySlots; j++){
+				if(buttons[i,j] == button){
+					removeButton(i,j);
+					return;
+				}
+			}
+		}
+	}
+
 }
