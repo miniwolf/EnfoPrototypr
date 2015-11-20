@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour {
 	public Text name;
 	public Text levelAndClassText;
 	public static Text gold;
+	public static Text baseHealth;
 	public Image picture;
 
 	public Slider experienceBar;
@@ -32,6 +33,7 @@ public class UIManager : MonoBehaviour {
 		itemDescriptionText = GameObject.Find("ButtonDescriptionText").GetComponent<Text>();
 		inventory = GameObject.Find("InventoryPanel").GetComponent<InventoryScript>();
 		gold = GameObject.Find("GoldText").GetComponent<Text>();
+		baseHealth = GameObject.Find("BaseHealthText").GetComponent<Text>();
 		DeactivateInfo();
 	}
 	
@@ -107,6 +109,10 @@ public class UIManager : MonoBehaviour {
 		experienceBar.value = 0;
 		itemDescriptionPanel.SetActive(false);
 		itemDescriptionText.text = "";
+	}
+	
+	public static void setBaseHealthText(string healthText){
+		baseHealth.text = healthText;
 	}
 
 }

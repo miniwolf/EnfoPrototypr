@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System;
 
 public class Clickable : MonoBehaviour {
 
@@ -17,7 +18,6 @@ public class Clickable : MonoBehaviour {
 	protected string className;
 	protected Sprite picture;
 	protected GameObject [,] buttons;
-
 
 	public string getClassName(){
 		return className;
@@ -56,7 +56,7 @@ public class Clickable : MonoBehaviour {
 		return maxLevel;
 	}
 
-	public GameObject instantiateButton(string resourcesPathToIcon, string description, bool isActionButton, long price = 0L){
+	public GameObject instantiateButton(string resourcesPathToIcon, string description, bool isActionButton, Func<GameObject,bool> action, long price){
 		GameObject go =(GameObject) GameObject.Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
 		go.GetComponent<Image>().sprite = Resources.Load<Sprite>(resourcesPathToIcon);
 		ActionButtonScript actionButtonScript = go.GetComponent<ActionButtonScript>();
@@ -68,8 +68,18 @@ public class Clickable : MonoBehaviour {
 			actionButtonScript.setIsInShop(false);
 		}
 		actionButtonScript.setPrice(price);
+
+		actionButtonScript.setAction(action);
+		//actionButtonScript.setAction(totalBaseRepair);
 		go.SetActive(false);
 		return go;
+	}
+
+	/*Here there will be functions which the buttons can have*/
+	public static bool totalBaseRepair(GameObject button){
+		UIManager.setBaseHealthText("Base: 30/30");
+		UIManager.removeButtonFromInventory(button);
+		return true;
 	}
 
 }

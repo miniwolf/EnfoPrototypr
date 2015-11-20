@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System;
 
 public class ActionButtonScript : MonoBehaviour {
 
@@ -8,7 +9,12 @@ public class ActionButtonScript : MonoBehaviour {
 	private bool isInShop;
 	private long price = 0L;
 	private string description  = "test";
-	
+	private Func<GameObject,bool> action;
+
+	public void setAction(Func<GameObject,bool> action){
+		this.action = action;
+	}
+
 	public void setDescription(string desc){
 		description = desc;
 	}
@@ -63,7 +69,7 @@ public class ActionButtonScript : MonoBehaviour {
 					UIManager.addButtonToInventory(newButton,price);
 				}
 			}else{
-				//do action
+				this.action(this.gameObject);
 			}
 		}else if(Input.GetMouseButtonUp(1)){//right click
 			sellBack();
