@@ -3,9 +3,9 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class countDownTimer : MonoBehaviour {
-    public float timeRemaining = 60;
+    public static float timeRemaining = 60;
     public Text waveText;
-    private int waveCount = 1;
+    public static int waveCount = 1;
     public static bool isSpawning = true;
 
 	// Use this for initialization
