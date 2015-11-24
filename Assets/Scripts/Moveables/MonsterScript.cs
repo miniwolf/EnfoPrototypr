@@ -15,13 +15,22 @@ public class MonsterScript : MonoBehaviour {
 
 	private States state = States.IDLE;
 	private NavMeshAgent agent;
-	private int health;
+	public float maxHealth = 1000;
+	public float health = 1000;
+	private HealthBarScript healthBar;
+
+	public float Health {
+		get {
+			return health;
+		}
+	}
 
 	// Use this for initialization
 	void Start () {
 		agent = GetComponent<NavMeshAgent>();
+		healthBar = GetComponent<HealthBarScript>();
 	}
-
+	
 	void Update () {
 		if ( !animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1") ) {
 			switchingState(state, inRange()); // Updating state
@@ -38,8 +47,9 @@ public class MonsterScript : MonoBehaviour {
 		}
 	}
 
-	public void GetHit(int Damage) {
-
+	public void GetHit(float Damage) {
+		health -= Damage;
+		healthBar.SetHealth(health, maxHealth);
 	}
 
 	private void chase() {
