@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameOverManager : MonoBehaviour {
-
-    //public Transform target;
-    //public GameObject enemy;
+public class GameOverManager : MonoBehaviour
+{
     private bool gameOver = false;
     public static int targetLife = 20;
 
@@ -24,14 +22,12 @@ public class GameOverManager : MonoBehaviour {
         if(gameOver && (Application.loadedLevel != 0 || Application.loadedLevel != 1))
         {
             Application.LoadLevel("gameOver");
-            // TODO: Bæta við restart hnappi
-            // Sýna í leik þegar target missir líf
         }
 	}
 
     void OnCollisionEnter(Collision col)
     {
-        if(col.collider.gameObject.tag == "Enemy")
+        if(col.collider.gameObject.tag == "EnemyLeft" || col.collider.gameObject.tag == "EnemyRight")
         {
             targetLife -= 1;
             Destroy(col.collider.gameObject);

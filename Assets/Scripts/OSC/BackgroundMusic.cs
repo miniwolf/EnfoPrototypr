@@ -21,12 +21,12 @@ public class BackgroundMusic : MonoBehaviour {
     void musicOSC()
     {
         float music = 1.0f;
-        OSCHandler.Instance.SendMessageToClient("SuperCollider", "/music", music);
+        OSCHandler.Instance.SendMessageToClient("SuperCollider", "/main/toggle1", music);
     }
 
     void windOSC()
     {
         float wind = 1.0f;
-        OSCHandler.Instance.SendMessageToClient("SuperCollider", "/wind", wind);
+        OSCHandler.Instance.SendMessageToClient("SuperCollider", "/main/wind1", wind);
     }
 }
