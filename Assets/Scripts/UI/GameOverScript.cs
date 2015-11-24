@@ -18,5 +18,6 @@ public class GameOverScript : MonoBehaviour {
     public void RestartGame()
     {
         Application.LoadLevel(0);
+        GameOverManager.targetLife = 20;
     }
 }

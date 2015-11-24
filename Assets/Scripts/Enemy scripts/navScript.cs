@@ -3,11 +3,13 @@ using System.Collections;
 
 public class navScript : MonoBehaviour {
 
-    private GameObject target;
-    private Transform[] wayPoint = new Transform[6];
-    private int currentWayPoint = 0;
-    private int maxWaypoints = 6;
+    GameObject target;
+    Transform[] wayPoint = new Transform[6];
+    int currentWayPoint = 0;
+    int maxWaypoints = 6;
 
+    //public float sinkSpeed = 2.5f;
+    //bool isSinking = true;
 
     // When enemy prefab is spawned, this function tags which side the enemy belongs to
     void Awake()
@@ -46,7 +48,7 @@ public class navScript : MonoBehaviour {
     // Update is called once per frame
     void Update ()
     {
-        if(currentWayPoint >= maxWaypoints)
+        if (currentWayPoint >= maxWaypoints)
         {
             gameObject.GetComponent<NavMeshAgent>().SetDestination(target.transform.position);
         }
@@ -60,9 +62,18 @@ public class navScript : MonoBehaviour {
     {
         if (trigger.gameObject.tag == "WayPoint")
         {
-            currentWayPoint += 1;            
-            Debug.Log(currentWayPoint);
+            currentWayPoint += 1;
+            //Debug.Log(currentWayPoint);
         }
     }
 
+/*
+    public void StartSinking()
+    {
+        GetComponent<NavMeshAgent>().enabled = false;
+        GetComponent<Rigidbody>().isKinematic = true;
+        isSinking = true;
+        Destroy(gameObject, 2f);
+    }
+*/
 }

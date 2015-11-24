@@ -3,8 +3,9 @@ using System.Collections;
 
 public class GameOverManager : MonoBehaviour
 {
-    private bool gameOver = false;
     public static int targetLife = 20;
+    private bool gameOver = false;
+
 
 	// Use this for initialization
 	void Start ()
@@ -30,8 +31,18 @@ public class GameOverManager : MonoBehaviour
         if(col.collider.gameObject.tag == "EnemyLeft" || col.collider.gameObject.tag == "EnemyRight")
         {
             targetLife -= 1;
+            //targetDamagedOSC();
+            //Invoke(targetDamagedOSC, 0);
             Destroy(col.collider.gameObject);
             Debug.Log(targetLife);
         }
     }
+
+
+    void targetDamagedOSC()
+    {
+        float wind = 1.0f;
+        OSCHandler.Instance.SendMessageToClient("SuperCollider", "/main/bubbles1", wind);
+    }
+
 }
