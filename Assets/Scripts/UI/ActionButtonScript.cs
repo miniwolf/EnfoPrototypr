@@ -66,6 +66,7 @@ public class ActionButtonScript : MonoBehaviour {
 					actionButtonScript.setPrice(price/2);
 					actionButtonScript.setIsInShop(false);
 					actionButtonScript.setIsActionButton(false);
+					actionButtonScript.setAction(this.action);
 					UIManager.addButtonToInventory(newButton,price);
 				}
 			}else{
