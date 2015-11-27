@@ -39,3 +39,25 @@ SynthDef(\bpfsaw, {
 	);
 };
 )
+
+
+
+// Heartbeat
+{Pulse.ar(1,0.25)}.play
+
+
+
+// TEST for clickable sound
+(
+x = {
+	var sig, env, dur, freq,
+			start, end;
+	dur = 0.07;
+	freq = 65;
+	start = 0.4;
+	end = 1;
+
+	env = XLine.kr(start, end, dur, doneAction:2);
+	sig = Pulse.ar(freq) * env;
+}.play;
+)

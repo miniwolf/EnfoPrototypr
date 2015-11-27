@@ -91,9 +91,12 @@ public class OSCHandler : MonoBehaviour
     /// </summary>
     public void Init()
     {
-        //Initialize OSC clients (transmitters)
-        //Example:		
-        CreateClient("SuperCollider", IPAddress.Parse ("127.0.0.1"), 57120);
+		//Initialize OSC clients (transmitters)
+		//Example:		
+
+		// Supercollider listens to incoming OSC data from port 57120
+		// In supercollider this can be verified with NetAddr.langPort
+		CreateClient("SuperCollider", IPAddress.Parse ("127.0.0.1"), 57120);
 
         //Initialize OSC servers (listeners)
         //Example:

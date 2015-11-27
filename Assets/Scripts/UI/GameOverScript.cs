@@ -4,23 +4,27 @@ using System.Collections;
 
 public class GameOverScript : MonoBehaviour {
 
-    public Canvas gameOverMenu;
-    public Button restartButton;
+	public Canvas gameOverMenu;
+	public Button restartButton;
 
 
 	// Use this for initialization
 	void Start () {
-        gameOverMenu = gameOverMenu.GetComponent<Canvas>();
-        restartButton = restartButton.GetComponent<Button>();
-        restartButton.enabled = true;
+		gameOverMenu = gameOverMenu.GetComponent<Canvas>();
+		restartButton = restartButton.GetComponent<Button>();
+		restartButton.enabled = true;
 	}
 	
-    public void RestartGame()
-    {
-        Application.LoadLevel(0);
-        GameOverManager.targetLife = 20;
-		countDownTimer.timeRemaining = 60;
-		countDownTimer.waveCount = 1;
-		countDownTimer.isSpawning = true;
-    }
+	public void RestartGame()
+	{
+		// Resettings parameters for new game
+		Application.LoadLevel(0);
+		TargetManager.targetLife = 30;
+		WaveManager.timeRemaining = 60;
+		WaveManager.waveCount = 1;
+		WaveManager.isSpawning = true;
+		navScript.agentSpeed = 5;
+		navScript.agentAccel = 5;
+		EnemyManager.spawnTime = 5f;
+	}
 }

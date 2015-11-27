@@ -9,6 +9,7 @@ public class MenuScript : MonoBehaviour {
     public Button quitText;
 
 	// Use this for initialization
+
 	void Start ()
     {
         quitMenu = quitMenu.GetComponent<Canvas>();
