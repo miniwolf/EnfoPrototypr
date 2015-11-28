@@ -22,7 +22,6 @@ public class InventoryScript : MonoBehaviour {
 		iconHeight = rt.rect.height/(ySlots+1);
 		xPos = gameObject.transform.position.x;
 		yPos = gameObject.transform.position.y;
-		Debug.Log("iconwidth = " + iconWidth + " iconheight = " + iconHeight);
 		for(int i = 0; i < xSlots; i++){
 			for(int j = 0; j < ySlots; j++){
 				buttons[i,j] = null;

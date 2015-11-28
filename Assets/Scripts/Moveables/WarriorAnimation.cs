@@ -34,7 +34,6 @@ namespace EnumExtension {
 	class IDLE : State { }
 	class MOVE : State {
 		public override void attack(WarriorAnimation anim) { }
-		public override void attackMove(WarriorAnimation anim) { }
 		public override void chase(WarriorAnimation anim, Transform target) { }
 	}
 
@@ -53,7 +52,6 @@ namespace EnumExtension {
 		private State currentState = new IDLE();
 		private Transitions transition = Transitions.NULL;
 		private NavMeshAgent agent;
-		private Vector3 goalPosition;
 		private GameObject enemy;
 		private bool attacking = false;
 
@@ -64,7 +62,6 @@ namespace EnumExtension {
 
 		void Start() {
 			agent = gameObject.GetComponent<NavMeshAgent>();
-			goalPosition = gameObject.transform.position;
 		}
 		
 		void Update() {
@@ -76,7 +73,6 @@ namespace EnumExtension {
 		}
 
 		private void switchState() {
-
 			if ( Input.GetMouseButton(1) ) {
 				currentState.doMove(this);
 			} else if ( Input.GetMouseButtonDown(0) && transition == Transitions.A ) {
@@ -89,12 +85,12 @@ namespace EnumExtension {
 				currentState.chase(this, enemy.transform);
 			} else if ( checkType(typeof(ATTACKING)) ) {
 				currentState = new IDLE();
-				if ( enemy == null || enemy.GetComponent<MonsterScript>().Health <= 0 ) {
+				if ( enemy == null || enemy.GetComponent<MonsterScript>().Health.Health <= 0 ) {
 					currentState = new IDLE();
 				}
 			}
 			if ( checkType(typeof(ATTACKMOVE)) || checkType(typeof(MOVE)) ) {
-				if ( V3Equal(goalPosition, transform.position) ) {
+				if ( V2Equal() ) {
 					stop();
 					currentState = new IDLE();
 				}
@@ -143,7 +139,7 @@ namespace EnumExtension {
 		private bool inRange(GameObject target, float range) {
 			if ( target == null || !rangeCheck(target.transform, range) ) {
 				enemy = FindClosestEnemy();
-				return rangeCheck(enemy.transform, range);
+				return false;//rangeCheck(enemy.transform, range);
 			}
 			return true;
 		}
@@ -152,11 +148,25 @@ namespace EnumExtension {
 			return Vector3.Distance(transform.position, enemyTransform.position) <= range;
 		}
 
-		private bool V3Equal(Vector3 a, Vector3 b) {
-			return Vector3.SqrMagnitude(a - b) < 0.08;
+		private bool V3Equal() {
+			if (!agent.pathPending && 
+			    agent.remainingDistance <= agent.stoppingDistance && 
+			    (agent.velocity.sqrMagnitude == 0f)) {
+
+				return true;
+			}
+			Debug.Log(agent.velocity.sqrMagnitude);
+			return false;
 		}
 
-		IEnumerator startAttackTimer() {
+		private bool V2Equal() {
+			if ( !agent.pathPending ) {
+				return agent.pathStatus == NavMeshPathStatus.PathComplete && !agent.hasPath;
+			}
+			return false;
+		}
+
+		private IEnumerator startAttackTimer() {
 			yield return new WaitForSeconds(stunTime);
 			attacking = false;
 		}
@@ -172,21 +182,19 @@ namespace EnumExtension {
 			RaycastHit hit;
 			if ( Physics.Raycast(ray, out hit) ) {
 				agent.SetDestination(hit.point);
-				goalPosition = hit.point;
 				animator.SetBool("Running", true);
 			}
 		}
 
 		public void attack() {
 			animator.SetTrigger("Attack1Trigger");
-			enemy.GetComponent<MonsterScript>().GetHit(damage);
+			enemy.GetComponent<MonsterScript>().Health.GetHit(damage);
 			attacking = true;
 			StartCoroutine(startAttackTimer());
 		}
 		
 		public void stop() {
 			animator.SetBool("Running", false);
-			agent.SetDestination(transform.position);
 		}
 
 		public void moveTo(Vector3 position) {

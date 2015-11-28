@@ -6,25 +6,28 @@ public class EnemyManager : MonoBehaviour {
 	public GameObject enemy;
 	public float spawnTime = 3f;
 	public float waveTime = 90f;
+	public Camera mainCamera;
+	public Transform player;
+
+	enum spawnPoint {
+		LEFT = 0,
+		RIGHT = 1
+	}
 
 	private Transform[] spawnPoints = new Transform[2];
 	private bool callStart = false;
 
-	void Awake()
-	{
-		spawnPoints[0] = GameObject.Find("EnemyLeftSpawnPoints").transform;
-		spawnPoints[1] = GameObject.Find("EnemyRightSpawnPoints").transform;
+	void Awake() {
+		spawnPoints[(int)spawnPoint.LEFT] = GameObject.Find("EnemyLeftSpawnPoints").transform;
+		spawnPoints[(int)spawnPoint.RIGHT] = GameObject.Find("EnemyRightSpawnPoints").transform;
 	}
 
-	void Start()
-	{
+	void Start() {
 		InvokeRepeating("Spawn", spawnTime, spawnTime);
 	}
 
-	void Update()
-	{
-		switch(callStart)
-		{
+	void Update() {
+		switch(callStart) {
 			case true:
 				if(countDownTimer.isSpawning)
 				{
@@ -42,15 +45,13 @@ public class EnemyManager : MonoBehaviour {
 		}
 	}
 
-	void Spawn()
-	{
-		int spawnPointIndexLeft = 0;
-		int spawnPointIndexRight = 1;
+	void Spawn() {
+		GameObject left = (GameObject) Instantiate(enemy, spawnPoints[(int)spawnPoint.LEFT].position, spawnPoints[(int)spawnPoint.LEFT].rotation);
+		left.GetComponent<HealthBarScript>().MainCamera = mainCamera;
+		NavigationFactory.CreateLeftEnemy(left.GetComponent<MonsterScript>(), player);
 
-		spawnFlag = 0;
-		Instantiate(enemy, spawnPoints[spawnPointIndexLeft].position, spawnPoints[spawnPointIndexLeft].rotation);
-
-		spawnFlag = 1;
-		Instantiate(enemy, spawnPoints[spawnPointIndexRight].position, spawnPoints[spawnPointIndexRight].rotation);
+		GameObject right = (GameObject) Instantiate(enemy, spawnPoints[(int)spawnPoint.RIGHT].position, spawnPoints[(int)spawnPoint.RIGHT].rotation);
+		right.GetComponent<HealthBarScript>().MainCamera = mainCamera;
+		NavigationFactory.CreateRightEnemy(right.GetComponent<MonsterScript>(), player);
 	}
 }
