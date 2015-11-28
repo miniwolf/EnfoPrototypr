@@ -2,8 +2,8 @@
 using System.Collections;
 
 public class HealthComponent {
-	private float maxHealth = 1000;
-	private float health = 1000;
+	private float maxHealth = 10;
+	private float health = 10;
 	private HealthBarScript healthBar;
 	
 	public float Health {

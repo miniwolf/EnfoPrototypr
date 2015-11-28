@@ -21,9 +21,14 @@ public class MonsterScript : Clickable {
 	void Start() {
 		health = new HealthComponent();
 		health.HealthBar = GetComponent<HealthBarScript>();
+		currentLevel = 2;
 	}
 	
 	void Update() {
+		if ( health.Health <= 0 ) {
+			Destroy(gameObject);
+			return;
+		} 
 		nav.Update();
 	}
 
