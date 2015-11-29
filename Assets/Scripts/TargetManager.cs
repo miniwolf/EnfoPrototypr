@@ -1,16 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TargetManager : MonoBehaviour
+public class TargetManager : Clickable
 {
-	public static int targetLife = 30;
 	private bool gameOver = false;
-	public static bool targetHit = false;
+
+	void Start()
+	{
+		targetHitPoint = 30;
+	}
 
 	// Update is called once per frame
 	void Update ()
 	{
-		if(targetLife <= 0)
+		if(targetHitPoint <= 0)
 		{
 			gameOver = true;
 		}
@@ -22,13 +25,16 @@ public class TargetManager : MonoBehaviour
 
 	void OnTriggerEnter(Collider trigger)
 	{
-		if (trigger.gameObject.tag == "EnemyLeft" || trigger.gameObject.tag == "EnemyRight")
+		if (trigger.gameObject.tag == "Enemy")
 		{
-			targetLife -= 1;
+			targetHitPoint -= 1;
+			Destroy(trigger.gameObject);
+
+			Debug.Log(targetHitPoint);
 			Invoke("targetDamagedOSC", 0);
-			Debug.Log(targetLife);
 		}
 	}
+
 
 	void targetDamagedOSC()
 	{

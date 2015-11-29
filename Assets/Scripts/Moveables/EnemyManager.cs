@@ -2,10 +2,8 @@
 using System.Collections;
 
 public class EnemyManager : MonoBehaviour {
-	public static int spawnFlag = 0; // 0 represents left spawning enemies, 1 right sided enemies
 	public GameObject enemy;
 	public float spawnTime = 3f;
-	public float waveTime = 90f;
 	public Camera mainCamera;
 	public Transform player;
 

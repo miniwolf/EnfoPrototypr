@@ -35,6 +35,10 @@ public class NavigationComponent {
 		if ( trigger.gameObject.tag == "WayPoint" ) {
 			currentWayPoint++;
 		}
+		else if ( trigger.gameObject.tag == "Target" )
+		{
+			//Debug.Log("HOMMATITTUR");
+		}
 	}
 
     // Update is called once per frame
@@ -108,13 +112,4 @@ public class NavigationComponent {
 		;
 	}
 
-/*
-    public void StartSinking()
-    {
-        GetComponent<NavMeshAgent>().enabled = false;
-        GetComponent<Rigidbody>().isKinematic = true;
-        isSinking = true;
-        Destroy(gameObject, 2f);
-    }
-*/
 }

@@ -19,12 +19,12 @@ public class GameOverScript : MonoBehaviour {
 	{
 		// Resettings parameters for new game
 		Application.LoadLevel(0);
-		TargetManager.targetLife = 30;
+		/*TargetManager.targetLife = 30;
 		WaveManager.timeRemaining = 60;
 		WaveManager.waveCount = 1;
 		WaveManager.isSpawning = true;
 		navScript.agentSpeed = 5;
 		navScript.agentAccel = 5;
-		EnemyManager.spawnTime = 5f;
+		EnemyManager.spawnTime = 5f;*/
 	}
 }

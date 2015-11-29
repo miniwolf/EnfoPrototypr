@@ -18,8 +18,8 @@ public class navScript : MonoBehaviour {
 	// When enemy prefab is spawned, this function tags which side the enemy belongs to
 	void Awake()
 	{
-		if (EnemyManager.spawnFlag == 0) gameObject.tag = "EnemyLeft";
-		if (EnemyManager.spawnFlag == 1) gameObject.tag = "EnemyRight";
+		//if (EnemyManager.spawnFlag == 0) gameObject.tag = "EnemyLeft";
+		//if (EnemyManager.spawnFlag == 1) gameObject.tag = "EnemyRight";
 	}
 
 	// Use this for initialization
