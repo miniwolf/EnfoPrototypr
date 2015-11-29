@@ -29,10 +29,10 @@ public class InventoryScript : MonoBehaviour {
 		}
 		
 		//test
-
+		/*
 		GameObject go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
 		AddButton (go,0,0);
-		/*
+
 		go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
 		AddButton (go,0,1);
 		go = (GameObject) Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
