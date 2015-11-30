@@ -21,7 +21,18 @@ public class MonsterScript : Clickable {
 	void Start() {
 		health = new HealthComponent();
 		health.HealthBar = GetComponent<HealthBarScript>();
+		maxMana = 666;
+		maxHealth = 750;
+		currentMana = 666;
+		currentHealth = 400;
+		characterName = "Arthas";
+		className = "Dark Knight";
 		currentLevel = 2;
+		maxLevel = 10;
+		currentExp = 78;
+		maxExp = 100;
+		selectedCircle = this.gameObject.transform.FindChild("SelectedCircle").gameObject;
+		picture = Resources.Load<Sprite>("Icons/arthas");
 	}
 	
 	void Update() {

@@ -62,6 +62,20 @@ namespace EnumExtension {
 
 		void Start() {
 			agent = gameObject.GetComponent<NavMeshAgent>();
+			maxHealth = 100;
+			currentHealth = 100;
+			maxMana = 50;
+			currentMana = 50;
+			maxExp = 100;
+			currentExp = 0;
+			maxLevel = 20;
+			currentLevel = 1;
+			
+			characterName = "Hattori";
+			className = "Ninja";
+			picture = Resources.Load<Sprite>("Icons/dragon");
+			buttons = null;
+			selectedCircle = this.gameObject.transform.FindChild("SelectedCircle").gameObject;
 		}
 		
 		void Update() {

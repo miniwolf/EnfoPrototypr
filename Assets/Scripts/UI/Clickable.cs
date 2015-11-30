@@ -16,7 +16,17 @@ public class Clickable : MonoBehaviour {
 	protected string characterName;
 	protected string className;
 	protected Sprite picture;
+	protected GameObject selectedCircle;
+
 	protected GameObject [,] buttons;
+
+	public void activateSelectedCircle(){
+		selectedCircle.SetActive(true);
+	}
+
+	public void deactivateSelectedCircle(){
+		selectedCircle.SetActive(false);
+	}
 
 	public string getClassName() {
 		return className;

@@ -28,6 +28,7 @@ public class UIManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		click = null;
 		mCamera = mainCamera.GetComponent<Camera>();
 		itemDescriptionPanel = GameObject.Find("ButtonDescriptionPanel");
 		itemDescriptionText = GameObject.Find("ButtonDescriptionText").GetComponent<Text>();
@@ -48,6 +49,7 @@ public class UIManager : MonoBehaviour {
 				DeactivateInfo();
 				actionInspector.ResetButtons();
 				click = hit.transform.gameObject.GetComponent<Clickable>();
+				click.activateSelectedCircle();
 				healthText.text = click.getCurrentHealth() + "/" + click.getMaxHealth();
 				manaText.text = click.getCurrentMana() + "/" + click.getMaxMana();
 				name.text = click.getName();
@@ -100,7 +102,9 @@ public class UIManager : MonoBehaviour {
 	}
 
 	public void DeactivateInfo(){
-
+		if(click != null){
+			click.deactivateSelectedCircle();
+		}
 		picture.sprite = Resources.Load<Sprite>("Icons/slot");
 		healthText.text = "0/0";
 		manaText.text = "0/0";
