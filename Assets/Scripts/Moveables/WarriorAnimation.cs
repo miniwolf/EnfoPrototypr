@@ -80,6 +80,9 @@ namespace EnumExtension {
 		
 		void Update() {
 			// TODO: Check first if selected
+			if(!selectedCircle.activeSelf){
+				return;
+			}
 			switchState();
 			if ( Input.anyKeyDown ) {
 				switchTransition();
