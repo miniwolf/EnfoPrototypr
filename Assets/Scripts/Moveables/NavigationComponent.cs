@@ -8,7 +8,7 @@ public class NavigationComponent {
 		CHASING
 	}
 
-	private float range = 7; // TODO: public is only for debug
+	private float range = 14; // 7 TODO: public is only for debug
 	private float min_range = 1.5f; // TODO: public is only for debug
 	
 	private const int maxWaypoints = 6;
@@ -35,14 +35,10 @@ public class NavigationComponent {
 		if ( trigger.gameObject.tag == "WayPoint" ) {
 			currentWayPoint++;
 		}
-		else if ( trigger.gameObject.tag == "Target" )
-		{
-			//Debug.Log("HOMMATITTUR");
-		}
 	}
 
-    // Update is called once per frame
-    public void Update() {
+	// Update is called once per frame
+	public void Update() {
 		if (animator && !animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1")) {
 			return;
 		}
@@ -60,7 +56,7 @@ public class NavigationComponent {
 		default:
 			return;
 		}
-    }
+	}
 
 	private void idle() {
 		if ( currentWayPoint >= maxWaypoints ) {

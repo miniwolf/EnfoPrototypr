@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TargetManager : Clickable
+public class TargetManager : LevelManager
 {
 	private bool gameOver = false;
 

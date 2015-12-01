@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿/*using UnityEngine;
 using System.Collections;
 
 public class navScript : MonoBehaviour {
@@ -30,7 +30,7 @@ public class navScript : MonoBehaviour {
 		rb = GetComponent<Rigidbody>();
 		capsuleCol = GetComponent<CapsuleCollider>();
 
-		ScaleEnemy();
+		//ScaleEnemy();
 
 		if (gameObject.tag == "EnemyLeft")
 		{
@@ -92,7 +92,7 @@ public class navScript : MonoBehaviour {
 		gameObject.transform.Translate(-Vector3.up * sinkSpeed * Time.deltaTime);
 		Destroy(gameObject, 2f);
 	}
-
+/*
 	void ScaleEnemy()
 	{
 		// Enemy parameters are scaled up on creation when wave number increases
@@ -100,4 +100,5 @@ public class navScript : MonoBehaviour {
 		agent.acceleration = agentAccel * WaveManager.waveCount;
 		gameObject.transform.localScale = WaveManager.waveCount * gameObject.transform.localScale;
 	}
-}
+	
+}*/

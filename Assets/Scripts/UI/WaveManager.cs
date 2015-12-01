@@ -2,40 +2,49 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class WaveManager : MonoBehaviour {
-
-	public static float timeRemaining = 60;
+public class WaveManager : LevelManager {
 	public Text waveText;
-	public static int waveCount = 1;
-	public static bool isSpawning = true;
+	private bool isSpawning = true;
+
+	private int waveSpawningTime = 60; // TEST values
+	private int waveWaitTime = 30;
+
+	public GameObject enemy;
+
+
+	void Start()
+	{
+		waveCount = 1;
+		waveTime = waveSpawningTime;
+	}
 
 	// Update is called once per frame
 	void Update ()
 	{
-		timeRemaining -= Time.deltaTime;
+		waveTime -= Time.deltaTime;
 
-		switch(isSpawning)
+		switch (isSpawning)
 		{
 			case true:
-				if(timeRemaining > 0)
+				if(waveTime > 0)
 				{
-					waveText.text = "Wave " + waveCount + " - " + timeRemaining.ToString("0");
+					waveText.text = "Wave " + waveCount + " - " + waveTime.ToString("0");
 				}
 				else
 				{
 					isSpawning = false;
-					timeRemaining = 30;
+					waveTime = waveWaitTime;
 				}
 				break;
 			case false:
-				if (timeRemaining > 0)
+				if (waveTime > 0)
 				{
-					waveText.text = "Next wave in " + timeRemaining.ToString("0");
+					waveText.text = "Next wave in " + waveTime.ToString("0");
 				}
 				else
 				{
 					isSpawning = true;
-					timeRemaining = 60;
+					waveTime = waveSpawningTime;
 					waveCount++;
 				}
 				break;

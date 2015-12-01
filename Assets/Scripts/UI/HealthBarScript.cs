@@ -19,7 +19,7 @@ public class HealthBarScript : MonoBehaviour {
 
 	void Update() { // Using the Billboard technique. Following the camera.
 		healthContainer.transform.LookAt(healthContainer.transform.position + mainCamera.transform.rotation * Vector3.back,
-		                 mainCamera.transform.rotation * Vector3.down);
+					mainCamera.transform.rotation * Vector3.down);
 	}
 
 	private void SetHealthBar(float myHealth){
