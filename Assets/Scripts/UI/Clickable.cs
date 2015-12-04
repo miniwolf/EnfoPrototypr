@@ -4,14 +4,11 @@ using UnityEngine.UI;
 using System;
 
 public class Clickable : MonoBehaviour {
-	protected int maxHealth;
-	protected int currentHealth;
+
+	protected HealthComponent health;
+	protected ExperienceComponent experience;
 	protected int maxMana;
 	protected int currentMana;
-	protected int maxExp;
-	protected int currentExp;
-	protected int maxLevel;
-	protected int currentLevel;
 
 	protected string characterName;
 	protected string className;
@@ -20,11 +17,25 @@ public class Clickable : MonoBehaviour {
 
 	protected GameObject [,] buttons;
 
-	public void activateSelectedCircle(){
+
+
+	public HealthComponent Health {
+		get {
+			return health;
+		}
+	}
+
+	public ExperienceComponent Experience {
+		get {
+			return experience;
+		}
+	}
+
+	public void activateSelectedCircle() {
 		selectedCircle.SetActive(true);
 	}
 
-	public void deactivateSelectedCircle(){
+	public void deactivateSelectedCircle() {
 		selectedCircle.SetActive(false);
 	}
 
@@ -32,12 +43,12 @@ public class Clickable : MonoBehaviour {
 		return className;
 	}
 
-	public int getMaxHealth() {
-		return maxHealth;
+	public float getMaxHealth() {
+		return health.MaxHealth;
 	}
 
-	public int getCurrentHealth() {
-		return currentHealth;
+	public float getCurrentHealth() {
+		return health.getCurrentHealth();
 	}
 
 	public int getMaxMana() {
@@ -61,19 +72,19 @@ public class Clickable : MonoBehaviour {
 	}
 
 	public int getMaxExp() {
-		return maxExp;
+		return experience.getMaxExp();
 	}
 
 	public int getCurrentExp() {
-		return currentExp;
+		return experience.getCurrentExp();
 	}
 
 	public int getCurrentLevel() {
-		return currentLevel;
+		return experience.getCurrentLevel();
 	}
 
 	public int getMaxLevel() {
-		return maxLevel;
+		return experience.getMaxLevel();;
 	}
 
 	public GameObject instantiateButton(string resourcesPathToIcon, string description, bool isActionButton, Func<GameObject,bool> action, long price) {

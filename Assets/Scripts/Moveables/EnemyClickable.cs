@@ -4,7 +4,7 @@ using System.Collections;
 public class EnemyClickable : Clickable {
 	
 	void Start () {
-		maxMana = 100;
+		/*maxMana = 100;
 		maxHealth = 100;
 		currentMana = 66;
 		currentHealth = 97;
@@ -17,7 +17,7 @@ public class EnemyClickable : Clickable {
 
 		picture = Resources.Load<Sprite>("Icons/arthas");
 		buttons = null; //enemies do not have buttons
-		/*buttons[0,0] = instantiateButton("Icons/Weapons_Sword", "a normal sword +10 attack",false);
+		buttons[0,0] = instantiateButton("Icons/Weapons_Sword", "a normal sword +10 attack",false);
 
 		buttons[0,1] = instantiateButton("Icons/Weapons_Sword", "a normal sword +10 attack");
 

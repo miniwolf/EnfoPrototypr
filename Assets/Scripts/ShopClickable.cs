@@ -6,16 +6,18 @@ public class ShopClickable : Clickable {
 	
 
 	void Start () {
+		health = new HealthComponent();
+		experience = new ExperienceComponent();
 		maxMana = 0;
-		maxHealth = 1000;
+		health.MaxHealth = 1000;
 		currentMana = 0;
-		currentHealth = 999;
+		health.CurrentHealth = 999;
 		characterName = "Item Shop";
 		className = "Shop building";
-		currentLevel = 1;
-		maxLevel = 1;
-		currentExp = 0;
-		maxExp = 100;
+		experience.CurrentLevel = 1;
+		experience.MaxLevel = 1;
+		experience.CurrentExp = 0;
+		experience.MaxExp = 100;
 
 		picture = Resources.Load<Sprite>("Icons/dragon");
 		selectedCircle = this.gameObject.transform.FindChild("SelectedCircle").gameObject;

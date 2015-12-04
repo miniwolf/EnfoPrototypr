@@ -5,10 +5,36 @@ public class HealthComponent {
 	private float maxHealth = 10;
 	private float health = 10;
 	private HealthBarScript healthBar;
-	
+
+
+	public float getMaxHealth(){
+		return maxHealth;
+	}
+	public float getCurrentHealth(){
+		return health;
+	}
+
 	public float Health {
 		get {
 			return health;
+		}
+	}
+
+	public float MaxHealth {
+		get {
+			return maxHealth;
+		}
+		set {
+			maxHealth = value;
+		}
+	}
+
+	public float CurrentHealth {
+		get {
+			return health;
+		}
+		set {
+			health = value;
 		}
 	}
 	
@@ -21,5 +47,6 @@ public class HealthComponent {
 	public void GetHit(float Damage) {
 		health -= Damage;
 		healthBar.SetHealth(health, maxHealth);
+		UIManager.setInfoChanged(true);
 	}
 }

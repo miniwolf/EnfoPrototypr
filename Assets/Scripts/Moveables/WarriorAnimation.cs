@@ -44,33 +44,33 @@ namespace EnumExtension {
 
 	public class WarriorAnimation : Clickable {
 		public Animator animator;
-		public float seeRange = 7;
-		public float attackRange = 3f;
-		public float damage = 10;
-		public float stunTime = 1.6f;
-
 		private State currentState = new IDLE();
 		private Transitions transition = Transitions.NULL;
 		private NavMeshAgent agent;
 		private GameObject enemy;
 		private bool attacking = false;
+		private AttackComponent attackComponent;
 
 		//Warrior types
 		public enum Warrior{Karate, Ninja, Brute, Sorceress};
 
 		public Warrior warrior;
 
+		public AttackComponent Attack{
+			get{
+				return attackComponent;
+			}
+		}
+
 		void Start() {
 			agent = gameObject.GetComponent<NavMeshAgent>();
-			maxHealth = 100;
-			currentHealth = 100;
+			health = new HealthComponent();
+			experience = new ExperienceComponent();
+			attackComponent = new AttackComponent();
+			health.MaxHealth = 100;
+			health.CurrentHealth = 100;
 			maxMana = 50;
 			currentMana = 50;
-			maxExp = 100;
-			currentExp = 0;
-			maxLevel = 20;
-			currentLevel = 1;
-			
 			characterName = "Hattori";
 			className = "Ninja";
 			picture = Resources.Load<Sprite>("Icons/dragon");
@@ -94,11 +94,11 @@ namespace EnumExtension {
 				currentState.doMove(this);
 			} else if ( Input.GetMouseButtonDown(0) && transition == Transitions.A ) {
 				currentState.attackMove(this);
-			} else if ( inRange(enemy, attackRange) ) {
+			} else if ( inRange(enemy, attackComponent.AttackRange) ) {
 				if ( !attacking ) {
 					currentState.attack(this);
 				}
-			} else if ( inRange(enemy, seeRange) ) {
+			} else if ( inRange(enemy, attackComponent.SeeRange) ) {
 				currentState.chase(this, enemy.transform);
 			} else if ( checkType(typeof(ATTACKING)) ) {
 				currentState = new IDLE();
@@ -184,7 +184,7 @@ namespace EnumExtension {
 		}
 
 		private IEnumerator startAttackTimer() {
-			yield return new WaitForSeconds(stunTime);
+			yield return new WaitForSeconds(attackComponent.StunTime);
 			attacking = false;
 		}
 
@@ -205,7 +205,8 @@ namespace EnumExtension {
 
 		public void attack() {
 			animator.SetTrigger("Attack1Trigger");
-			enemy.GetComponent<MonsterScript>().Health.GetHit(damage);
+			//enemy.GetComponent<MonsterScript>().Health.GetHit(attackComponent.Damage);
+			attackComponent.attack(enemy.GetComponent<MonsterScript>().Health);
 			attacking = true;
 			StartCoroutine(startAttackTimer());
 		}

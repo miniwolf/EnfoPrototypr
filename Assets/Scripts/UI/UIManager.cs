@@ -26,6 +26,8 @@ public class UIManager : MonoBehaviour {
 	public ActionInspectorScript actionInspector;
 	public static InventoryScript inventory;
 
+	private static bool infoChanged = false;
+
 	// Use this for initialization
 	void Start () {
 		click = null;
@@ -62,6 +64,21 @@ public class UIManager : MonoBehaviour {
 
 			}
 		}
+		if(infoChanged){
+			updateCharacterInfo();
+		}
+	}
+
+	public static void setInfoChanged(bool value) {
+		infoChanged = value;
+	}
+
+	public void updateCharacterInfo() {
+		healthText.text = click.getCurrentHealth() + "/" + click.getMaxHealth();
+		manaText.text = click.getCurrentMana() + "/" + click.getMaxMana();
+		experienceBar.maxValue = click.getMaxExp();
+		experienceBar.value = click.getCurrentExp();
+		levelAndClassText.text = "Level " +click.getCurrentLevel() + " " + click.getClassName();
 	}
 
 	public static void showDescription(string desc, bool isActionButton, long price){
