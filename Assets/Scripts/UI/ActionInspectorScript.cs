@@ -41,9 +41,9 @@ public class ActionInspectorScript : MonoBehaviour {
 		go.SetActive(true);
 		go.transform.SetParent(gameObject.transform);
 		go.transform.localPosition = new Vector3(0f,0f,0f);
-		go.transform.localScale = new Vector3(1,1,1);
+		go.transform.localScale = new Vector3(0.9f,0.9f,0.9f);
 		//go.transform.localPosition += new Vector3(iconWidth/1.2f + iconWidth*(x)*1.1f,-iconHeight/1.2f -iconHeight*(y)*1.1f,0f);
-		go.transform.localPosition = new Vector3 (-iconWidth*(4-x), iconHeight*(3-y),0f);
+		go.transform.localPosition = new Vector3 (-iconWidth*(4-x)/1.05f, iconHeight*(3-y),0f);
 	}	
 
 	public void AddAllButtons(GameObject[,] array){
