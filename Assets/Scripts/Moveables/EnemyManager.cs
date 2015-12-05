@@ -4,7 +4,10 @@ using System.Collections;
 public class EnemyManager : LevelManager {
 	public GameObject enemy;
 	private MonsterScript monster;
-	public float spawnTime = 5f;
+	private float spawnTime = 4f;
+	private float initialHealth = 10f;
+	private float initialSpeed = 7.5f;
+
 	public Camera mainCamera;
 	public Transform player;
 	MonsterScript leftMonster;
@@ -31,14 +34,14 @@ public class EnemyManager : LevelManager {
 
 		switch (callStart) {
 			case true:
-				if(countDownTimer.isSpawning)
+				if(WaveManager.isSpawning)
 				{
 					callStart = false;
 					Start();
 				}
 				break;
 			case false:
-				if(!countDownTimer.isSpawning)
+				if(!WaveManager.isSpawning)
 				{
 					callStart = true;
 					CancelInvoke();
@@ -58,28 +61,43 @@ public class EnemyManager : LevelManager {
 		rightMonster = right.GetComponent<MonsterScript>();
 		NavigationFactory.CreateRightEnemy(rightMonster, player);
 
-		ScaleEnemies();
+		ScaleEnemies(initialHealth, initialSpeed);
 	}
 
-	void ScaleEnemies()
+	void ScaleEnemies(float healthScale, float speedScale)
 	{
-		float healthScale = waveCount * 10f;
-		float speedScale = waveCount * 1.25f;
-
+		healthScale = healthScale * waveCount;
+		speedScale = speedScale + waveCount;
 		leftMonster.Health.UpdateHealth(healthScale, healthScale);
 		rightMonster.Health.UpdateHealth(healthScale, healthScale);
-		/*
+		
 		leftMonster.GetComponent<NavMeshAgent>().speed = speedScale;
 		leftMonster.GetComponent<NavMeshAgent>().acceleration = speedScale;
 
 		rightMonster.GetComponent<NavMeshAgent>().speed = speedScale;
 		rightMonster.GetComponent<NavMeshAgent>().acceleration = speedScale;
-		*/
-		leftMonster.GetComponent<Transform>().transform.localScale = 0.5f * waveCount * leftMonster.GetComponent<Transform>().transform.localScale;
-		rightMonster.GetComponent<Transform>().transform.localScale = 0.5f * waveCount * rightMonster.GetComponent<Transform>().transform.localScale;
+		
+		switch(waveCount)
+		{
+			case 1:
+				leftMonster.GetComponent<Transform>().transform.localScale = 1.0f * leftMonster.GetComponent<Transform>().transform.localScale;
+				rightMonster.GetComponent<Transform>().transform.localScale = 1.0f * rightMonster.GetComponent<Transform>().transform.localScale;
+				break;
+			case 2:
+				leftMonster.GetComponent<Transform>().transform.localScale = 1.2f * leftMonster.GetComponent<Transform>().transform.localScale;
+				rightMonster.GetComponent<Transform>().transform.localScale = 1.2f * rightMonster.GetComponent<Transform>().transform.localScale;
+				break;
+			case 3:
+				leftMonster.GetComponent<Transform>().transform.localScale = 1.4f * leftMonster.GetComponent<Transform>().transform.localScale;
+				rightMonster.GetComponent<Transform>().transform.localScale = 1.4f * rightMonster.GetComponent<Transform>().transform.localScale;
+				break;
+			case 4:
+				// Final wave
+				leftMonster.GetComponent<Transform>().transform.localScale = 1.9f * leftMonster.GetComponent<Transform>().transform.localScale;
+				rightMonster.GetComponent<Transform>().transform.localScale = 1.9f * rightMonster.GetComponent<Transform>().transform.localScale;
 
-		//leftMonster.GetComponent<CapsuleCollider>().radius = waveCount / 2;
-		//rightMonster.GetComponent<CapsuleCollider>().radius = waveCount / 2;
-
+				CancelInvoke();
+				break;
+		}
 	}
 }

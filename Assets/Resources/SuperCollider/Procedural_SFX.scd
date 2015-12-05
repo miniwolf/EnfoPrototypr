@@ -17,13 +17,37 @@ OSCdef.new(
 				\cfmax, 1500,
 				\atk, 1,
 				\ldb, 6,
-				\amp, 0.2,
+				\amp, 0.5,
 				\out, 0,
 			).play
 		)
 
 	},
 	'/main/music2'
+);
+
+// BEAT OSC
+OSCdef.new(
+	\beat1,
+	{
+		arg msg, time, addr, port;
+		msg.postln;
+
+		// Pattern to play the beat
+		(
+			Pbind(
+				\instrument, \smooth,
+				//\midinote, Pseq([60, 72, 71, 67, 69, 71, 72, 60, 69, 67], inf),
+
+				\midinote, Pseq([20, 20, 20, 20, 20, 20, 20], inf),
+				//\dur, 0.3,
+				\dur, Pseq([0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5], inf),
+				\amp, 2,
+				\out, 0,
+			).play
+		)
+	},
+	'/main/beat1'
 );
 
 
@@ -33,13 +57,17 @@ OSCdef.new(
 	{
 		arg msg, time, addr, port;
 		msg.postln;
-		y = Synth.new(\windSynth);
+		x = Synth.new(\windSynth,
+			[
+				\amp, 1,
+			],
+		);
 	},
 	'/main/wind1'
 );
 
 
-// TARGET LOSING LIFE OSC
+// ENEMIES DYING OSC
 OSCdef.new(
 	\bubbles,
 	{
@@ -62,6 +90,19 @@ OSCdef.new(
 	'/main/bubbles1'
 );
 
+
+// TARGET HIT OSC
+OSCdef.new(
+	\targetHit,
+	{
+		arg msg, time, addr, port;
+		msg.postln;
+		x = Synth.new(\targetSynth);
+	},
+	'/main/targetHit1'
+);
+
+
 // CLICK OSC
 // TODO: Add click OSC to everything clickable...
 // Tweak the click sound  - More coconut like
@@ -79,6 +120,15 @@ OSCdef.new(
 
 )
 
+(
+SynthDef.new(\targetSynth, {
+	var sig, freq, env;
+	env = XLine.kr(1, 0.01, 1, doneAction:2);
+	freq = XLine.kr(LinRand(470,250), 105, 1.0, doneAction:2);
+	sig = Pulse.ar(freq) * env;
+	Out.ar([0,1], sig);
+}).add
+)
 
 (
 SynthDef.new(\windSynth, {
@@ -118,6 +168,16 @@ SynthDef(\bpfsaw, {
 )
 
 
+
+(
+SynthDef(\smooth, { |freq = 440, sustain = 1, amp = 0.5|
+    var sig;
+    sig = SinOsc.ar(freq, 0, amp) * EnvGen.kr(Env.linen(0.05, sustain, 0.1), doneAction: 2);
+    Out.ar(0, sig ! 2)
+}).add;
+)
+
+
 (
 SynthDef.new(\StartMenuMusicSynth, {
 	var a, sig;
@@ -141,6 +201,16 @@ SynthDef.new(\StartMenuMusicSynth, {
 
 
 (
+SynthDef.new(\BackgroundBeat, {
+	var level, sig, out;
+	level = 1; // Out amplitude
+	sig = Limiter.ar(GVerb.ar(sin(Ringz.ar(Impulse.ar(2*LFNoise1.ar(1).range(1,1).round/4),[20,80,110,240,330,150],1.0).sum),5, 3 , 0.8)/4, level);
+	Out.ar([0,1], sig);
+});
+)
+
+
+(
 SynthDef.new(\ClickSynth, {
 	var sig, env, dur, freq,
 			start, end;
@@ -158,15 +228,17 @@ SynthDef.new(\ClickSynth, {
 
 
 
+//
 // TEST for clickable sound
+//
 (
 x = {
 	var sig, env, dur, freq,
 			start, end;
-	dur = 0.07;
-	freq = 65;
-	start = 0.4;
-	end = 1;
+	dur = 0.04;
+	freq = 85;
+	start = 1;
+	end = 0.2;
 
 	env = XLine.kr(start, end, dur, doneAction:2);
 	sig = Pulse.ar(freq) * env;
@@ -175,7 +247,7 @@ x = {
 
 
 
-
+(
 SynthDef(\beep, {
     arg freq = 440;
     var sig;
@@ -183,6 +255,9 @@ SynthDef(\beep, {
     sig = sig * EnvGen.kr(Env.perc(0.1, 0.5), doneAction:2);
 	Out.ar([0,1], sig);
 }).send(s);
+)
+
+
 
 
 a = {};
@@ -201,7 +276,7 @@ c.schedAbs(
 a = {Synth(\beep)};
 
 
-a = {Synth(\beep, [\freq, 480])};
+a = {Synth(\beep, [\freq, 580])};
 
 a = {
     arg beat;
@@ -211,6 +286,8 @@ a = {
     // play a low note every beat
     Synth(\beep, [\freq, 219]);
 }
+
+
 
 //~notes = [56, 58, 64, 70, 40, 40, 40, 32, 32];
 ~notes = [60, 70];
@@ -226,13 +303,3 @@ a = {
 	Synth(\beep, [\freq, 440]);
 	Synth(\beep, [\freq, 219]);
 }
-
-
-
-
-// TODO:
-// SFX: Player wounded, enemy wounded, player swing sword, enemy swing sword...
-// Target loses life (done)
-
-// (Important!) Freshness of sound!:
-// Random amplitude levels, use envelopes

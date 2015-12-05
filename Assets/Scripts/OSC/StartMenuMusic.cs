@@ -4,10 +4,10 @@ using System.Collections;
 public class StartMenuMusic : MonoBehaviour
 {
 	// Use this for initialization
-	void Start () {
+	void Awake ()
+	{
 		Invoke("startMenuMusicOSC", 0);
 	}
-
 
 	void startMenuMusicOSC()
 	{

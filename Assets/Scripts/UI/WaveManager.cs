@@ -4,13 +4,13 @@ using System.Collections;
 
 public class WaveManager : LevelManager {
 	public Text waveText;
-	private bool isSpawning = true;
+	public static bool isSpawning = true;
 
-	private int waveSpawningTime = 60; // TEST values
-	private int waveWaitTime = 30;
+	private int waveSpawningTime = 30; // TEST values
+	private int waveWaitingTime = 10;
+	private int maxWaves = 4;
 
 	public GameObject enemy;
-
 
 	void Start()
 	{
@@ -28,24 +28,30 @@ public class WaveManager : LevelManager {
 			case true:
 				if(waveTime > 0)
 				{
-					waveText.text = "Wave " + waveCount + " - " + waveTime.ToString("0");
+					waveText.text = "Wave " + waveCount + " - " + waveTime.ToString("0") + " s";
 				}
 				else
 				{
 					isSpawning = false;
-					waveTime = waveWaitTime;
+					waveTime = waveWaitingTime;
 				}
 				break;
 			case false:
 				if (waveTime > 0)
 				{
-					waveText.text = "Next wave in " + waveTime.ToString("0");
+					waveText.text = "Next wave " + waveTime.ToString("0") + " s";
 				}
 				else
 				{
+					waveCount++;
 					isSpawning = true;
 					waveTime = waveSpawningTime;
-					waveCount++;
+					if (waveCount >= maxWaves)
+					{
+						waveText.text = "FINAL WAVE";
+						enabled = false; // Disables the Update() function
+						return;
+					}
 				}
 				break;
 		}

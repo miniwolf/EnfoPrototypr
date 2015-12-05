@@ -8,8 +8,8 @@ public class BackgroundMusic : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
-		InvokeRepeating("musicOSC", 0, musicRepeatSecs);
+	void Awake () {
+		Invoke("beatOSC", 0);
 		InvokeRepeating("windOSC", 0, windRepeatSecs);
 	}
 
@@ -18,16 +18,16 @@ public class BackgroundMusic : MonoBehaviour {
 
 	}
 
-	void musicOSC()
-	{
-		float music = 1.0f;
-		OSCHandler.Instance.SendMessageToClient("SuperCollider", "/main/music1", music);
-	}
-
 	void windOSC()
 	{
 		float wind = 1.0f;
 		OSCHandler.Instance.SendMessageToClient("SuperCollider", "/main/wind1", wind);
+	}
+
+	void beatOSC()
+	{
+		float beat = 1.0f;
+		OSCHandler.Instance.SendMessageToClient("SuperCollider", "/main/beat1", beat);
 	}
 
 }
