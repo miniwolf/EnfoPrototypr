@@ -14,36 +14,46 @@ public class MainCameraMovementScript : MonoBehaviour {
 			mousePosition = Input.mousePosition;
 		}
 		if(Input.GetMouseButton(2)){
-			transform.position += new Vector3((Input.mousePosition.y - mousePosition.y)*Time.deltaTime,0,(mousePosition.x-Input.mousePosition.x)*Time.deltaTime );
+			if(Input.mousePosition.y - mousePosition.y > 0 && (transform.position.x < 120)){//going up
+				transform.position += new Vector3((Input.mousePosition.y - mousePosition.y)*Time.deltaTime,0,0);
+			}else if(Input.mousePosition.y - mousePosition.y < 0 && transform.position.x > -50){//going down
+				transform.position += new Vector3((Input.mousePosition.y - mousePosition.y)*Time.deltaTime,0,0);
+			}
+			if(Input.mousePosition.x - mousePosition.x > 0 && transform.position.z > 30){ //going right
+				transform.position += new Vector3(0,0,(mousePosition.x-Input.mousePosition.x)*Time.deltaTime);
+			}else if(Input.mousePosition.x - mousePosition.x < 0 && transform.position.z < 175){ //going left
+				transform.position += new Vector3(0,0,(mousePosition.x-Input.mousePosition.x)*Time.deltaTime);
+			}
+			//transform.position += new Vector3((Input.mousePosition.y - mousePosition.y)*Time.deltaTime,0,(mousePosition.x-Input.mousePosition.x)*Time.deltaTime );
 		}
 		/*Camera movement with mouse movement*/
-		if(Input.mousePosition.x < 30){
+		if(Input.mousePosition.x < 30 && transform.position.z < 175){ //left
 			transform.position += new Vector3(0,0,speed * Time.deltaTime);
 		}
-		if(Input.mousePosition.x > Screen.width -30){
+		if(Input.mousePosition.x > Screen.width -30 && transform.position.z > 30){ //right
 			transform.position -= new Vector3(0,0,speed * Time.deltaTime);
 		}
-		if(Input.mousePosition.y < 10){
+		if(Input.mousePosition.y < 10 && (transform.position.x > -50)){ //down
 			transform.position -= new Vector3(speed * Time.deltaTime,0,0);
 		}
-		if(Input.mousePosition.y > Screen.height -30){
+		if(Input.mousePosition.y > Screen.height -30  && (transform.position.x < 120)){//up
 			transform.position += new Vector3(speed * Time.deltaTime,0,0);
 		}
 
 		/*Camera movement with direction keys*/
-		if(Input.GetKey(KeyCode.UpArrow))
+		if(Input.GetKey(KeyCode.UpArrow) && (transform.position.x < 120))
 		{
 			transform.position += new Vector3(speed * Time.deltaTime,0,0);
 		}
-		if(Input.GetKey(KeyCode.DownArrow))
+		if(Input.GetKey(KeyCode.DownArrow) && (transform.position.x > -50))
 		{
 			transform.position -= new Vector3(speed * Time.deltaTime,0,0);
 		}
-		if(Input.GetKey(KeyCode.LeftArrow))
+		if(Input.GetKey(KeyCode.LeftArrow) && transform.position.z < 175)
 		{
 			transform.position += new Vector3(0,0,speed * Time.deltaTime);
 		}
-		if(Input.GetKey(KeyCode.RightArrow))
+		if(Input.GetKey(KeyCode.RightArrow) && transform.position.z > 30)
 		{
 			transform.position -= new Vector3(0,0,speed * Time.deltaTime);
 		}
