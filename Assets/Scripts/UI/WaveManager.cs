@@ -5,11 +5,10 @@ using System.Collections;
 public class WaveManager : LevelManager {
 	public Text waveText;
 	public static bool isSpawning = true;
-
-	private int waveSpawningTime = 30; // TEST values
-	private int waveWaitingTime = 10;
-	private int maxWaves = 4;
-
+	private bool gameIsWon;
+	private int waveSpawningTime = 30;
+	private int waveWaitingTime = 15;
+	public int maxWaves = 4;
 	public GameObject enemy;
 
 	void Start()
@@ -23,34 +22,28 @@ public class WaveManager : LevelManager {
 	{
 		waveTime -= Time.deltaTime;
 
-		switch (isSpawning)
-		{
+		switch (isSpawning) {
 			case true:
-				if(waveTime > 0)
-				{
+				if(waveTime > 0) {
 					waveText.text = "Wave " + waveCount + " - " + waveTime.ToString("0") + " s";
 				}
-				else
-				{
+				else {
 					isSpawning = false;
 					waveTime = waveWaitingTime;
 				}
 				break;
 			case false:
-				if (waveTime > 0)
-				{
+				if (waveTime > 0) {
 					waveText.text = "Next wave " + waveTime.ToString("0") + " s";
 				}
-				else
-				{
+				else {
 					waveCount++;
 					isSpawning = true;
 					waveTime = waveSpawningTime;
-					if (waveCount >= maxWaves)
-					{
+					if (waveCount >= maxWaves) {
 						waveText.text = "FINAL WAVE";
 						enabled = false; // Disables the Update() function
-						return;
+						break;
 					}
 				}
 				break;

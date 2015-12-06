@@ -31,7 +31,6 @@ public class EnemyManager : LevelManager {
 	}
 
 	void Update() {
-
 		switch (callStart) {
 			case true:
 				if(WaveManager.isSpawning)

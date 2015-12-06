@@ -2,11 +2,12 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class TargetManager : LevelManager
+public class TargetManager : WaveManager
 {
 	public Text baseHealthText;
-	private bool gameOver = false;
 	private int maxTargetHitPoints;
+	private GameObject[] enemiesToFind;
+	private int enemyCount;
 	bool damaged;
 	public Image damageImage;
 	public float flashSpeed = 5f;
@@ -23,15 +24,22 @@ public class TargetManager : LevelManager
 	// Update is called once per frame
 	void Update ()
 	{
-		if(targetHitPoints <= 0)
+		enemiesToFind = GameObject.FindGameObjectsWithTag("Enemy");
+		enemyCount = enemiesToFind.Length;
+
+		// Winning condition
+		if (waveCount == maxWaves && enemyCount == 0)
 		{
-			gameOver = true;
+			Application.LoadLevel("gameWon");
 		}
-		if(gameOver && (Application.loadedLevel != 0 || Application.loadedLevel != 1))
+
+		// Game Over condition
+		if (targetHitPoints <= 0)
 		{
 			Application.LoadLevel("gameOver");
 		}
 
+		// Flashes red screen if base is hit
 		if (damaged)
 		{
 			damageImage.color = flashColour;

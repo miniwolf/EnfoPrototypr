@@ -2,17 +2,18 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class GameOverScript : MonoBehaviour {
-	public Canvas gameOverMenu;
+public class GameWonScript : MonoBehaviour {
+	public Canvas gameWonMenu;
 	public Button restartButton;
 
 	// Use this for initialization
-	void Start () {
-		gameOverMenu = gameOverMenu.GetComponent<Canvas>();
+	void Start()
+	{
+		gameWonMenu = gameWonMenu.GetComponent<Canvas>();
 		restartButton = restartButton.GetComponent<Button>();
 		restartButton.enabled = true;
 	}
-	
+
 	public void RestartGame()
 	{
 		Application.LoadLevel("mergeScene");
