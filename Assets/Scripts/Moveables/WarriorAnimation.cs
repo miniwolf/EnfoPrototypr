@@ -39,6 +39,8 @@ namespace EnumExtension {
 
 	public enum Transitions {
 		A,
+		M1,
+		AM0,
 		NULL
 	}
 
@@ -79,20 +81,16 @@ namespace EnumExtension {
 		}
 		
 		void Update() {
-			// TODO: Check first if selected
-			if(!selectedCircle.activeSelf){
-				return;
-			}
-			switchState();
-			if ( Input.anyKeyDown ) {
+			if ( selectedCircle.activeSelf ) {
 				switchTransition();
 			}
+			switchState();
 		}
 
 		private void switchState() {
-			if ( Input.GetMouseButton(1) ) {
+			if ( transition == Transitions.M1 ) {
 				currentState.doMove(this);
-			} else if ( Input.GetMouseButtonDown(0) && transition == Transitions.A ) {
+			} else if ( transition == Transitions.AM0 ) {
 				currentState.attackMove(this);
 			} else if ( inRange(enemy, attackComponent.AttackRange) ) {
 				if ( !attacking ) {
@@ -114,20 +112,28 @@ namespace EnumExtension {
 			}
 		}
 
-		private bool checkType (System.Type type) {
+		private bool checkType(System.Type type) {
 			return currentState.GetType().Equals(type);
 		}
 
 		private void switchTransition() {
 			switch (transition) {
 			case Transitions.A:
-				if ( !Input.GetKeyDown("a") ) {
+				if ( Input.GetMouseButtonDown(0) ) {
+					transition = Transitions.AM0;
+				} else if ( Input.GetKeyDown("A") ) {
 					transition = Transitions.NULL;
 				}
+				break;
+			case Transitions.AM0:
+			case Transitions.M1:
+				transition = Transitions.NULL;
 				break;
 			case Transitions.NULL:
 				if ( Input.GetKeyDown("a") ) {
 					transition = Transitions.A;
+				} else if ( Input.GetMouseButtonDown(1) ) {
+					transition = Transitions.M1;
 				}
 				break;
 			}
@@ -136,11 +142,11 @@ namespace EnumExtension {
 		// TODO: Look at notes for better solution
 		private GameObject FindClosestEnemy() {
 			// Find all game objects with tag Enemy
-			GameObject[] gos = GameObject.FindGameObjectsWithTag("Enemy"); 
+			GameObject[] gos = GameObject.FindGameObjectsWithTag("Enemy");
 
-			float distance = Mathf.Infinity; 
-			Vector3 position = transform.position; 
 			// Iterate through them and find the closest one
+			float distance = Mathf.Infinity;
+			Vector3 position = transform.position;
 			GameObject closest = null;
 			foreach (GameObject go in gos) {
 				Vector3 diff = go.transform.position - position;
@@ -167,8 +173,8 @@ namespace EnumExtension {
 
 		private bool V3Equal() {
 			if (!agent.pathPending && 
-			    agent.remainingDistance <= agent.stoppingDistance && 
-			    (agent.velocity.sqrMagnitude == 0f)) {
+				agent.remainingDistance <= agent.stoppingDistance && 
+				(agent.velocity.sqrMagnitude == 0f)) {
 
 				return true;
 			}
