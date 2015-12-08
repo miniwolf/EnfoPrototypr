@@ -6,8 +6,8 @@ public class WaveManager : LevelManager {
 	public Text waveText;
 	public static bool isSpawning = true;
 	private bool gameIsWon;
-	private int waveSpawningTime = 30;
-	private int waveWaitingTime = 15;
+	private int waveSpawningTime = 10; // TEST values
+	private int waveWaitingTime = 2;
 	public int maxWaves = 4;
 	public GameObject enemy;
 

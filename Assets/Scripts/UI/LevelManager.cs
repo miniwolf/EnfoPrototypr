@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LevelManager : MonoBehaviour{
+public class LevelManager : MonoBehaviour {
 
 	protected int targetHitPoints;
 	protected static int waveCount; // TODO get rid of static variable
