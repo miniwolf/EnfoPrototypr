@@ -6,8 +6,8 @@ public class MainCameraMovementScript : MonoBehaviour {
 	private float speed = 100.0f;
 	private float speed2 = 85.0f;
 	private Vector3 mousePosition;
-	void Update()
-	{
+	
+	void Update() {
 
 		/*Camera movement with middle mouse button*/
 		if (Input.GetMouseButtonDown(2)){
