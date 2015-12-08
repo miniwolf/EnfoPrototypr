@@ -4,7 +4,8 @@ using EnumExtension;
 
 public class MonsterScript : Clickable {
 	private NavigationComponent nav;
-
+	private GameObject attackCircle;
+	private bool isRightClicked = true;
 
 	public NavigationComponent Nav {
 		set {
@@ -24,6 +25,7 @@ public class MonsterScript : Clickable {
 		/*endOfTest*/
 
 
+		attackCircle = this.gameObject.transform.FindChild("AttackCircle").gameObject;
 		health = new HealthComponent();
 		health.HealthBar = GetComponent<HealthBarScript>();
 		experience = new ExperienceComponent();
@@ -40,13 +42,29 @@ public class MonsterScript : Clickable {
 		selectedCircle = this.gameObject.transform.FindChild("SelectedCircle").gameObject;
 		picture = Resources.Load<Sprite>("Icons/arthas");
 	}
-	
+
+	void fadeCircle() {
+		attackCircle.SetActive(true);
+		MeshRenderer mesh = attackCircle.GetComponent<MeshRenderer>();
+		Color c = new Color(mesh.material.color.r, mesh.material.color.g, mesh.material.color.b, mesh.material.color.a - 0.3f);
+		mesh.material.color = c;
+		if(mesh.material.color.a == 0) {
+			isRightClicked = false;
+			Color c2 = new Color(mesh.material.color.r, mesh.material.color.g, mesh.material.color.b, 100);
+			mesh.material.color = c2;
+			attackCircle.SetActive(false);
+		}
+	}
+
 	void Update() {
 		if ( health.Health <= 0 ) {
 			character.Experience.addExp(101,character.Health, character.Attack);
 			Destroy(gameObject);
 			return;
 		} 
+		if(isRightClicked){
+			fadeCircle();
+		}
 		nav.Update();
 	}
 
