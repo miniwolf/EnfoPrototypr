@@ -53,7 +53,6 @@ public class MonsterScript : Clickable {
 			attackCircle.SetActive(false);
 			isRightClicked = false;
 		}
-		Debug.Log("alfa = " + mesh.material.color.a);
 
 	}
 
