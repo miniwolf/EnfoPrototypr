@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using EnumExtension;
 
 public class UIManager : MonoBehaviour {
 
@@ -38,6 +39,18 @@ public class UIManager : MonoBehaviour {
 		gold = GameObject.Find("GoldText").GetComponent<Text>();
 		baseHealth = GameObject.Find("BaseHealthText").GetComponent<Text>();
 		DeactivateInfo();
+
+		click = GameObject.Find("NinjaContainer").GetComponent<WarriorAnimation>();
+		click.activateSelectedCircle();
+		healthText.text = click.getCurrentHealth() + "/" + click.getMaxHealth();
+		manaText.text = click.getCurrentMana() + "/" + click.getMaxMana();
+		name.text = click.getName();
+		picture.sprite = click.getPicure();
+		actionInspector.AddAllButtons(click.getButtons());
+		
+		experienceBar.maxValue = click.getMaxExp();
+		experienceBar.value = click.getCurrentExp();
+		levelAndClassText.text = "Level " +click.getCurrentLevel() + " " + click.getClassName();
 	}
 	
 	// Update is called once per frame
@@ -63,6 +76,17 @@ public class UIManager : MonoBehaviour {
 				levelAndClassText.text = "Level " +click.getCurrentLevel() + " " + click.getClassName();
 
 			}
+		}
+		if(Input.GetMouseButton(1)){
+			if(click.isSelected() && click.tag == "Player") {
+				this.ray = mCamera.ScreenPointToRay(Input.mousePosition);
+				if(Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Clickable"))){
+					if(hit.transform.gameObject.tag == "Enemy"){
+						hit.transform.gameObject.GetComponent<MonsterScript>().rightClicked();
+					}
+				}
+			}
+
 		}
 		if(infoChanged){
 			updateCharacterInfo();

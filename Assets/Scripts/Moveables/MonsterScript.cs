@@ -5,7 +5,7 @@ using EnumExtension;
 public class MonsterScript : Clickable {
 	private NavigationComponent nav;
 	private GameObject attackCircle;
-	private bool isRightClicked = true;
+	private bool isRightClicked = false;
 
 	public NavigationComponent Nav {
 		set {
@@ -44,16 +44,17 @@ public class MonsterScript : Clickable {
 	}
 
 	void fadeCircle() {
-		attackCircle.SetActive(true);
 		MeshRenderer mesh = attackCircle.GetComponent<MeshRenderer>();
-		Color c = new Color(mesh.material.color.r, mesh.material.color.g, mesh.material.color.b, mesh.material.color.a - 0.3f);
+		Color c = new Color(mesh.material.color.r, mesh.material.color.g, mesh.material.color.b, mesh.material.color.a - Time.deltaTime);
 		mesh.material.color = c;
-		if(mesh.material.color.a == 0) {
-			isRightClicked = false;
-			Color c2 = new Color(mesh.material.color.r, mesh.material.color.g, mesh.material.color.b, 100);
+		if(mesh.material.color.a <= 0) {
+			Color c2 = new Color(mesh.material.color.r, mesh.material.color.g, mesh.material.color.b, 1);
 			mesh.material.color = c2;
 			attackCircle.SetActive(false);
+			isRightClicked = false;
 		}
+		Debug.Log("alfa = " + mesh.material.color.a);
+
 	}
 
 	void Update() {
@@ -66,6 +67,14 @@ public class MonsterScript : Clickable {
 			fadeCircle();
 		}
 		nav.Update();
+	}
+
+	public void rightClicked() {
+		if(isRightClicked == true){
+			return;
+		}
+		attackCircle.SetActive(true);
+		isRightClicked = true;
 	}
 
 	void OnTriggerEnter(Collider trigger) {

@@ -39,6 +39,10 @@ public class Clickable : MonoBehaviour {
 		selectedCircle.SetActive(false);
 	}
 
+	public bool isSelected() {
+		return selectedCircle.activeSelf;
+	}
+
 	public string getClassName() {
 		return className;
 	}
