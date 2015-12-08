@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ExperienceComponent : MonoBehaviour {
+public class ExperienceComponent {
 	private int exp = 0;
 	private int maxExp = 100;
 	private int level = 1;
