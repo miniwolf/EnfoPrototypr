@@ -19,7 +19,7 @@ public class ShopClickable : Clickable {
 		experience.CurrentExp = 0;
 		experience.MaxExp = 100;
 
-		picture = Resources.Load<Sprite>("Icons/dragon");
+		picture = Resources.Load<Sprite>("Icons/shop");
 		selectedCircle = this.gameObject.transform.FindChild("SelectedCircle").gameObject;
 		buttons = new GameObject[4,3];
 		buttons[0,0] = instantiateButton("Icons/knife", "A very strong kife, +15 attack", false,totalBaseRepair, 100L);

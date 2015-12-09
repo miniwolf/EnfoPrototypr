@@ -30,17 +30,17 @@ public class MonsterScript : Clickable {
 		health.HealthBar = GetComponent<HealthBarScript>();
 		experience = new ExperienceComponent();
 		maxMana = 0;
-		health.MaxHealth = 20;
+		health.MaxHealth = 15;
 		currentMana = 0;
-		health.CurrentHealth = 20;
-		characterName = "Arthas";
-		className = "Dark Knight";
+		health.CurrentHealth = 15;
+		characterName = "Orc";
+		className = "Warrior";
 		experience.CurrentLevel = 1;
 		experience.MaxLevel = 1;
 		experience.CurrentExp = 0;
 		experience.MaxExp = 100;
 		selectedCircle = this.gameObject.transform.FindChild("SelectedCircle").gameObject;
-		picture = Resources.Load<Sprite>("Icons/arthas");
+		picture = Resources.Load<Sprite>("Icons/orc");
 	}
 
 	void fadeCircle() {

@@ -73,7 +73,7 @@ namespace EnumExtension {
 			currentMana = 50;
 			characterName = "Hattori";
 			className = "Ninja";
-			picture = Resources.Load<Sprite>("Icons/dragon");
+			picture = Resources.Load<Sprite>("Icons/ninjaHead");
 			buttons = null;
 			selectedCircle = this.gameObject.transform.FindChild("SelectedCircle").gameObject;
 		}
