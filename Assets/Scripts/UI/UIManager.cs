@@ -58,9 +58,10 @@ public class UIManager : MonoBehaviour {
 		if(Input.GetMouseButton(0)){
 			this.ray = mCamera.ScreenPointToRay(Input.mousePosition);
 			if(Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Clickable"))){
-				if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()){
+				/*if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()){
+					Debug.Log("return");
 					return;
-				}
+				}*/
 				DeactivateInfo();
 				actionInspector.ResetButtons();
 				click = hit.transform.gameObject.GetComponent<Clickable>();

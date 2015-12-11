@@ -4,9 +4,9 @@ using System.Collections;
 public class EnemyManager : LevelManager {
 	public GameObject enemy;
 	private MonsterScript monster;
-	private float spawnTime = 4f;
+	private float spawnTime = 5f;
 	private float initialHealth = 10f;
-	private float initialSpeed = 7.5f;
+	private float initialSpeed = 5f;
 
 	public Camera mainCamera;
 	public Transform player;
@@ -63,38 +63,40 @@ public class EnemyManager : LevelManager {
 		ScaleEnemies(initialHealth, initialSpeed);
 	}
 
-	void ScaleEnemies(float healthScale, float speedScale)
-	{
+	void ScaleEnemies(float healthScale, float speedScale) {
 		healthScale = healthScale * waveCount;
-		speedScale = speedScale + waveCount;
+		//speedScale = speedScale + waveCount;
 		leftMonster.Health.UpdateHealth(healthScale, healthScale);
 		rightMonster.Health.UpdateHealth(healthScale, healthScale);
 		
 		leftMonster.GetComponent<NavMeshAgent>().speed = speedScale;
-		leftMonster.GetComponent<NavMeshAgent>().acceleration = speedScale;
-
 		rightMonster.GetComponent<NavMeshAgent>().speed = speedScale;
-		rightMonster.GetComponent<NavMeshAgent>().acceleration = speedScale;
 		
-		switch(waveCount)
-		{
+		switch(waveCount) {
 			case 1:
 				leftMonster.GetComponent<Transform>().transform.localScale = 1.0f * leftMonster.GetComponent<Transform>().transform.localScale;
 				rightMonster.GetComponent<Transform>().transform.localScale = 1.0f * rightMonster.GetComponent<Transform>().transform.localScale;
+				leftMonster.GetComponent<Renderer>().material.color = Color.yellow;
+				rightMonster.GetComponent<Renderer>().material.color = Color.yellow;
 				break;
 			case 2:
 				leftMonster.GetComponent<Transform>().transform.localScale = 1.2f * leftMonster.GetComponent<Transform>().transform.localScale;
 				rightMonster.GetComponent<Transform>().transform.localScale = 1.2f * rightMonster.GetComponent<Transform>().transform.localScale;
+				leftMonster.GetComponent<Renderer>().material.color = Color.cyan;
+				rightMonster.GetComponent<Renderer>().material.color = Color.cyan;
 				break;
 			case 3:
 				leftMonster.GetComponent<Transform>().transform.localScale = 1.4f * leftMonster.GetComponent<Transform>().transform.localScale;
 				rightMonster.GetComponent<Transform>().transform.localScale = 1.4f * rightMonster.GetComponent<Transform>().transform.localScale;
+				leftMonster.GetComponent<Renderer>().material.color = Color.blue;
+				rightMonster.GetComponent<Renderer>().material.color = Color.blue;
 				break;
 			case 4:
 				// Final wave
 				leftMonster.GetComponent<Transform>().transform.localScale = 1.9f * leftMonster.GetComponent<Transform>().transform.localScale;
 				rightMonster.GetComponent<Transform>().transform.localScale = 1.9f * rightMonster.GetComponent<Transform>().transform.localScale;
-
+				leftMonster.GetComponent<Renderer>().material.color = Color.red;
+				rightMonster.GetComponent<Renderer>().material.color = Color.red;
 				CancelInvoke();
 				break;
 		}

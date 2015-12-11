@@ -5,14 +5,39 @@ using EnumExtension;
 public class MonsterScript : Clickable {
 	private NavigationComponent nav;
 	private GameObject attackCircle;
+	//private HealthComponent health;
+	private NavMeshAgent agent;
+	private Rigidbody rb;
+	private CapsuleCollider capsuleCol;
+	private float sinkSpeed;
+	private bool rewardExp = true;
+
+
 	private bool isRightClicked = false;
 
 	public NavigationComponent Nav {
 		set {
-			this.nav = value;
+			nav = value;
+		}
+	}
+	
+	public HealthComponent Health {
+		get
+		{
+			return health;
 		}
 	}
 
+	// Use this for initialization
+	void Awake() {
+		sinkSpeed = 6f;
+		agent = GetComponent<NavMeshAgent>();
+		rb = GetComponent<Rigidbody>();
+		capsuleCol = GetComponent<CapsuleCollider>();
+
+		health = new HealthComponent();
+		health.HealthBar = GetComponent<HealthBarScript>();
+	}
 
 	/*test*/
 	private WarriorAnimation character;
@@ -23,23 +48,21 @@ public class MonsterScript : Clickable {
 		/*test*/
 		character = GameObject.Find("NinjaContainer").GetComponent<WarriorAnimation>();
 		/*endOfTest*/
-
-
-		attackCircle = this.gameObject.transform.FindChild("AttackCircle").gameObject;
-		health = new HealthComponent();
-		health.HealthBar = GetComponent<HealthBarScript>();
+		attackCircle = gameObject.transform.FindChild("AttackCircle").gameObject;
+		//health = new HealthComponent();
+		//health.HealthBar = GetComponent<HealthBarScript>();
 		experience = new ExperienceComponent();
 		maxMana = 0;
-		health.MaxHealth = 15;
+		//health.MaxHealth = 15;
 		currentMana = 0;
-		health.CurrentHealth = 15;
+		//health.CurrentHealth = 15;
 		characterName = "Orc";
 		className = "Warrior";
 		experience.CurrentLevel = 1;
 		experience.MaxLevel = 1;
 		experience.CurrentExp = 0;
 		experience.MaxExp = 100;
-		selectedCircle = this.gameObject.transform.FindChild("SelectedCircle").gameObject;
+		selectedCircle = gameObject.transform.FindChild("SelectedCircle").gameObject;
 		picture = Resources.Load<Sprite>("Icons/orc");
 	}
 
@@ -57,11 +80,14 @@ public class MonsterScript : Clickable {
 	}
 
 	void Update() {
-		if ( health.Health <= 0 ) {
-			character.Experience.addExp(101,character.Health, character.Attack);
-			Destroy(gameObject);
+		if (health.Health <= 0) {
+			if (rewardExp) {
+				character.Experience.addExp(101, character.Health, character.Attack);
+				rewardExp = false;
+			}
+			SinkAndDestroy();
 			return;
-		} 
+		}
 		if(isRightClicked){
 			fadeCircle();
 		}
@@ -78,5 +104,13 @@ public class MonsterScript : Clickable {
 
 	void OnTriggerEnter(Collider trigger) {
 		nav.OnTriggerEnter(trigger);
+	}
+
+	void SinkAndDestroy() {
+		agent.enabled = false;
+		rb.isKinematic = true;
+		capsuleCol.enabled = false;
+		gameObject.transform.Translate(-Vector3.up * sinkSpeed * Time.deltaTime);
+		Destroy(gameObject, 2f);
 	}
 }

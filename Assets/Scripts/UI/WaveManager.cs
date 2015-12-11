@@ -6,20 +6,17 @@ public class WaveManager : LevelManager {
 	public Text waveText;
 	public static bool isSpawning = true;
 	private bool gameIsWon;
-	private int waveSpawningTime = 10; // TEST values
-	private int waveWaitingTime = 2;
+	private int waveSpawningTime = 30;
+	private int waveWaitingTime = 20;
 	public int maxWaves = 4;
-	public GameObject enemy;
 
-	void Start()
-	{
+	void Start() {
 		waveCount = 1;
 		waveTime = waveSpawningTime;
 	}
 
 	// Update is called once per frame
-	void Update ()
-	{
+	void Update () {
 		waveTime -= Time.deltaTime;
 
 		switch (isSpawning) {

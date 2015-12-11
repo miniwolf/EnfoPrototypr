@@ -97,9 +97,9 @@ public class Clickable : MonoBehaviour {
 		ActionButtonScript actionButtonScript = go.GetComponent<ActionButtonScript>();
 		actionButtonScript.setDescription(description);
 		actionButtonScript.setIsActionButton(isActionButton);
-		if(!isActionButton){
+		if(!isActionButton) {
 			actionButtonScript.setIsInShop(true);
-		}else{
+		} else {
 			actionButtonScript.setIsInShop(false);
 		}
 		actionButtonScript.setPrice(price);
