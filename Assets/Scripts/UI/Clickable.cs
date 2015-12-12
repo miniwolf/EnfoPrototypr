@@ -1,12 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 using System;
 
 public class Clickable : MonoBehaviour {
-
-	protected HealthComponent health;
-	protected ExperienceComponent experience;
+	protected HealthComponent healthComponent = new HealthComponent();
+	protected ExperienceComponent experienceComponent = new ExperienceComponent();
 	protected int maxMana;
 	protected int currentMana;
 
@@ -15,28 +14,22 @@ public class Clickable : MonoBehaviour {
 	protected Sprite picture;
 	protected GameObject selectedCircle;
 
-	protected GameObject [,] buttons;
-
-
+	protected GameObject[,] buttons;
 
 	public HealthComponent Health {
 		get {
-			return health;
+			return healthComponent;
 		}
 	}
 
 	public ExperienceComponent Experience {
 		get {
-			return experience;
+			return experienceComponent;
 		}
 	}
 
-	public void activateSelectedCircle() {
-		selectedCircle.SetActive(true);
-	}
-
-	public void deactivateSelectedCircle() {
-		selectedCircle.SetActive(false);
+	public void SetSelectedCircle(bool selected) {
+		selectedCircle.SetActive(selected);
 	}
 
 	public bool isSelected() {
@@ -48,11 +41,11 @@ public class Clickable : MonoBehaviour {
 	}
 
 	public float getMaxHealth() {
-		return health.MaxHealth;
+		return healthComponent.MaxHealth;
 	}
 
 	public float getCurrentHealth() {
-		return health.getCurrentHealth();
+		return healthComponent.Health;
 	}
 
 	public int getMaxMana() {
@@ -76,19 +69,19 @@ public class Clickable : MonoBehaviour {
 	}
 
 	public int getMaxExp() {
-		return experience.getMaxExp();
+		return experienceComponent.getMaxExp();
 	}
 
 	public int getCurrentExp() {
-		return experience.getCurrentExp();
+		return experienceComponent.getCurrentExp();
 	}
 
 	public int getCurrentLevel() {
-		return experience.getCurrentLevel();
+		return experienceComponent.getCurrentLevel();
 	}
 
 	public int getMaxLevel() {
-		return experience.getMaxLevel();;
+		return experienceComponent.getMaxLevel();
 	}
 
 	public GameObject instantiateButton(string resourcesPathToIcon, string description, bool isActionButton, Func<GameObject,bool> action, long price) {
@@ -97,11 +90,7 @@ public class Clickable : MonoBehaviour {
 		ActionButtonScript actionButtonScript = go.GetComponent<ActionButtonScript>();
 		actionButtonScript.setDescription(description);
 		actionButtonScript.setIsActionButton(isActionButton);
-		if(!isActionButton) {
-			actionButtonScript.setIsInShop(true);
-		} else {
-			actionButtonScript.setIsInShop(false);
-		}
+		actionButtonScript.setIsInShop(!isActionButton);
 		actionButtonScript.setPrice(price);
 
 		actionButtonScript.setAction(action);

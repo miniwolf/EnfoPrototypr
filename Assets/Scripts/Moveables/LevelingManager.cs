@@ -15,6 +15,6 @@ public class LevelingManager : MonoBehaviour {
 		health.CurrentHealth *= healthMultiplier;
 		attack.Damage *= damageMultiplier;
 		attack.StunTime *= stunTimeMultiplier;
-		attack.AttackRange *= attackRangeMultiplier;
+		//attack.AttackRange *= attackRangeMultiplier;
 	}
 }

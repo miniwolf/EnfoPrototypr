@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using EnumExtension;
 
 public class NavigationFactory : MonoBehaviour {
-	public static void CreateLeftEnemy(MonsterScript monster, Transform player) {
+	public static void CreateLeftEnemy(MonsterScript monster, WarriorAnimation player) {
 		Transform[] wayPoints = new Transform[6];
 		wayPoints[0] = GameObject.Find("WayPoint1L").transform;
 		wayPoints[1] = GameObject.Find("WayPoint2L").transform;
@@ -12,11 +13,12 @@ public class NavigationFactory : MonoBehaviour {
 		wayPoints[5] = GameObject.Find("WayPoint6L").transform;
 		
 		GameObject target = GameObject.Find("Target");
-		NavigationComponent component = new NavigationComponent(monster.GetComponent<NavMeshAgent>(), monster, wayPoints, target, player);
-		monster.Nav = component;
+		monster.Target = target;
+		monster.Player = player;
+		monster.WayPoints = wayPoints;
 	}
 
-	public static void CreateRightEnemy(MonsterScript monster, Transform player) {
+	public static void CreateRightEnemy(MonsterScript monster, WarriorAnimation player) {
 		Transform[] wayPoints = new Transform[6];
 		wayPoints[0] = GameObject.Find("WayPoint1R").transform;
 		wayPoints[1] = GameObject.Find("WayPoint2R").transform;
@@ -26,7 +28,8 @@ public class NavigationFactory : MonoBehaviour {
 		wayPoints[5] = GameObject.Find("WayPoint6R").transform;
 		
 		GameObject target = GameObject.Find("Target");
-		NavigationComponent component = new NavigationComponent(monster.GetComponent<NavMeshAgent>(), monster, wayPoints, target, player);
-		monster.Nav = component;
+		monster.Target = target;
+		monster.Player = player;
+		monster.WayPoints = wayPoints;
 	}
 }

@@ -54,10 +54,10 @@ public class ExperienceComponent {
 		return maxLevel;
 	}
 
-	public void addExp(int experience,  HealthComponent characterHealth, AttackComponent characterAttack) {
+	public void addExp(int experience, HealthComponent characterHealth, AttackComponent characterAttack) {
 		int levelDifference = level;
 		exp += experience;
-		while(exp > maxExp && level < maxLevel){
+		while ( exp > maxExp && level < maxLevel ) {
 			exp -= maxExp;
 			maxExp = Mathf.FloorToInt(maxExp * experienceGrowthRatio);
 			level++;

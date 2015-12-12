@@ -2,21 +2,22 @@
 using System.Collections;
 
 public class AttackComponent {
-
-	private float seeRange = 7;
-	private float attackRange = 3f;
+	private bool attackRange = false;
 	private float damage = 10;
 	private float stunTime = 1.6f;
+	private bool attacking = false;
+	private Animator animator;
 
-	public float SeeRange {
+	public bool Attacking {
 		get {
-			return seeRange;
+			return attacking;
 		}
 		set {
-			seeRange = value;
+			attacking = value;
 		}
 	}
-	public float AttackRange {
+
+	public bool AttackRange {
 		get {
 			return attackRange;
 		}
@@ -24,6 +25,7 @@ public class AttackComponent {
 			attackRange = value;
 		}
 	}
+
 	public float Damage {
 		get {
 			return damage;
@@ -32,6 +34,7 @@ public class AttackComponent {
 			damage = value;
 		}
 	}
+
 	public float StunTime {
 		get {
 			return stunTime;
@@ -41,10 +44,19 @@ public class AttackComponent {
 		}
 	}
 
-	public void attack(HealthComponent enemyHealth) {
-		enemyHealth.GetHit(damage);
+	public AttackComponent(Animator animator) {
+		this.animator = animator;
+	}
+
+	public void attack(HealthComponent healthComponent) {
+		healthComponent.GetHit(damage);
+		attacking = true;
 		UIManager.setInfoChanged(true);
 	}
 
-
+	private void AnimateAttack() {
+		if ( animator ) {
+			animator.SetTrigger("Attack1Trigger");
+		}
+	}
 }

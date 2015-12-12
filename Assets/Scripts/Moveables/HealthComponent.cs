@@ -6,14 +6,6 @@ public class HealthComponent {
 	private float health = 10;
 	private HealthBarScript healthBar;
 
-
-	public float getMaxHealth(){
-		return maxHealth;
-	}
-	public float getCurrentHealth(){
-		return health;
-	}
-
 	public float Health {
 		get {
 			return health;
@@ -60,4 +52,9 @@ public class HealthComponent {
 		healthBar.SetHealth(health, maxHealth);
 		UIManager.setInfoChanged(true);
 	}
+
+	public void Update() {
+		healthBar.Update();
+	}
 }
+	

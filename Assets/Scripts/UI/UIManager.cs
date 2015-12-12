@@ -4,7 +4,6 @@ using UnityEngine.UI;
 using EnumExtension;
 
 public class UIManager : MonoBehaviour {
-
 	private RaycastHit hit;
 	private Ray ray;
 	private Camera mCamera;
@@ -20,8 +19,8 @@ public class UIManager : MonoBehaviour {
 
 	public Slider experienceBar;
 
-	public static GameObject itemDescriptionPanel;
-	public static Text itemDescriptionText;
+	private static GameObject itemDescriptionPanel;
+	private static Text itemDescriptionText;
 
 	public GameObject mainCamera;
 	public ActionInspectorScript actionInspector;
@@ -55,17 +54,16 @@ public class UIManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetMouseButton(0)){
+		if ( Input.GetMouseButton(0) ) {
 			this.ray = mCamera.ScreenPointToRay(Input.mousePosition);
 			if(Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Clickable"))){
 				/*if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()){
-					Debug.Log("return");
 					return;
 				}*/
 				DeactivateInfo();
 				actionInspector.ResetButtons();
 				click = hit.transform.gameObject.GetComponent<Clickable>();
-				click.activateSelectedCircle();
+				click.SetSelectedCircle(true);
 				healthText.text = click.getCurrentHealth() + "/" + click.getMaxHealth();
 				manaText.text = click.getCurrentMana() + "/" + click.getMaxMana();
 				name.text = click.getName();
@@ -74,22 +72,21 @@ public class UIManager : MonoBehaviour {
 
 				experienceBar.maxValue = click.getMaxExp();
 				experienceBar.value = click.getCurrentExp();
-				levelAndClassText.text = "Level " +click.getCurrentLevel() + " " + click.getClassName();
+				levelAndClassText.text = "Level " + click.getCurrentLevel() + " " + click.getClassName();
 
 			}
 		}
-		if(Input.GetMouseButton(1)){
-			if(click.isSelected() && click.tag == "Player") {
+		if ( Input.GetMouseButton(1) ) {
+			if ( click.isSelected() && click.tag == "Player" ) {
 				this.ray = mCamera.ScreenPointToRay(Input.mousePosition);
-				if(Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Clickable"))){
-					if(hit.transform.gameObject.tag == "Enemy"){
-						hit.transform.gameObject.GetComponent<MonsterScript>().rightClicked();
-					}
+				if ( Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Clickable")) &&
+					 hit.transform.gameObject.tag == "Enemy") {
+					hit.transform.gameObject.GetComponent<MonsterScript>().rightClicked();
 				}
 			}
 
 		}
-		if(infoChanged){
+		if ( infoChanged ) {
 			updateCharacterInfo();
 		}
 	}
@@ -108,13 +105,7 @@ public class UIManager : MonoBehaviour {
 
 	public static void showDescription(string desc, bool isActionButton, long price){
 		itemDescriptionPanel.SetActive(true);
-		//Debug.Log("isinshop = " + isInShop + "; isininventory = " + isInInventory);
-		if(!isActionButton){
-			itemDescriptionText.text = "Price: " + price + ". " + desc;
-		}else{
-			itemDescriptionText.text = desc;
-		}
-
+		itemDescriptionText.text = (isActionButton ? "" : "Price: " + price + ". ") + desc;
 	}
 
 	public static long getGold(){
@@ -123,7 +114,7 @@ public class UIManager : MonoBehaviour {
 
 	public static void sellForPrice(long price){
 		long result = long.Parse(gold.text)+price;
-		gold.text = "" + result;
+		gold.text = result.ToString();
 	}
 
 	public static void stopShowDescription(){
@@ -133,9 +124,9 @@ public class UIManager : MonoBehaviour {
 
 	public static void addButtonToInventory(GameObject button, long price){
 		int actualGold = int.Parse(gold.text);
-		if(inventory.AddButton(button)){
-			gold.text = (actualGold-price).ToString();
-		}else{
+		if ( inventory.AddButton(button) ) {
+			gold.text = (actualGold - price).ToString();
+		} else {
 			Destroy(button);
 		}
 	}
@@ -143,9 +134,9 @@ public class UIManager : MonoBehaviour {
 		inventory.removeButton(button);
 	}
 
-	public void DeactivateInfo(){
-		if(click != null){
-			click.deactivateSelectedCircle();
+	public void DeactivateInfo() {
+		if ( click != null ) {
+			click.SetSelectedCircle(false);
 		}
 		picture.sprite = Resources.Load<Sprite>("Icons/slot");
 		healthText.text = "0/0";
@@ -157,8 +148,7 @@ public class UIManager : MonoBehaviour {
 		itemDescriptionText.text = "";
 	}
 	
-	public static void setBaseHealthText(string healthText){
+	public static void setBaseHealthText(string healthText) {
 		baseHealth.text = healthText;
 	}
-
 }

@@ -2,27 +2,23 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class HealthBarScript : MonoBehaviour {
+public class HealthBarScript {
 	public Image healthBar; // This should link to the green bar
 	public GameObject healthContainer;
 	private Camera mainCamera;
 
-	public Camera MainCamera {
-		set {
-			mainCamera = value;
-		}
+	public HealthBarScript(Camera mainCamera, GameObject healthContainer, Image healthBar) {
+		this.mainCamera = mainCamera;
+		this.healthContainer = healthContainer;
+		this.healthBar = healthBar;
 	}
 
 	public void SetHealth(float currentHealth, float maxHealth) {
-		SetHealthBar(currentHealth / maxHealth);
+		healthBar.fillAmount = currentHealth / maxHealth;
 	}
 
-	void Update() { // Using the Billboard technique. Following the camera.
+	public void Update() { // Using the Billboard technique. Following the camera.
 		healthContainer.transform.LookAt(healthContainer.transform.position + mainCamera.transform.rotation * Vector3.back,
 					mainCamera.transform.rotation * Vector3.down);
-	}
-
-	private void SetHealthBar(float myHealth){
-		healthBar.fillAmount = myHealth;
 	}
 }

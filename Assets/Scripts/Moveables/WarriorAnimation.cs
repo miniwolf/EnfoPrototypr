@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 namespace EnumExtension {
@@ -46,31 +47,36 @@ namespace EnumExtension {
 
 	public class WarriorAnimation : Clickable {
 		public Animator animator;
+		public GameObject healthBar;
+		public Camera mainCamera;
+		private NavMeshAgent agent;
+
 		private State currentState = new IDLE();
 		private Transitions transition = Transitions.NULL;
-		private NavMeshAgent agent;
 		private GameObject enemy;
-		private bool attacking = false;
 		private AttackComponent attackComponent;
+		private NavigationComponent navComponent;
 
-		//Warrior types
-		public enum Warrior{Karate, Ninja, Brute, Sorceress};
-
-		public Warrior warrior;
-
-		public AttackComponent Attack{
-			get{
+		public AttackComponent Attack {
+			get {
 				return attackComponent;
 			}
 		}
 
 		void Start() {
-			agent = gameObject.GetComponent<NavMeshAgent>();
-			health = new HealthComponent();
-			experience = new ExperienceComponent();
-			attackComponent = new AttackComponent();
-			health.MaxHealth = 100;
-			health.CurrentHealth = 100;
+			agent = GetComponent<NavMeshAgent>();
+
+			GameObject healthBarObject = (GameObject) Instantiate(healthBar, new Vector3(), new Quaternion());
+			healthBarObject.transform.SetParent(transform);
+			healthBarObject.transform.localPosition = new Vector3(0, 3.0f, 0);
+			Image image = healthBarObject.GetComponentInChildren<Image>();
+			healthComponent.HealthBar = new HealthBarScript(mainCamera, healthBarObject, image);
+			experienceComponent = new ExperienceComponent();
+			attackComponent = new AttackComponent(animator);
+			navComponent = new NavigationComponent(agent, animator);
+
+			healthComponent.MaxHealth = 100;
+			healthComponent.CurrentHealth = 100;
 			maxMana = 50;
 			currentMana = 50;
 			characterName = "Hattori";
@@ -85,6 +91,7 @@ namespace EnumExtension {
 				switchTransition();
 			}
 			switchState();
+			Health.Update();
 		}
 
 		private void switchState() {
@@ -92,11 +99,11 @@ namespace EnumExtension {
 				currentState.doMove(this);
 			} else if ( transition == Transitions.AM0 ) {
 				currentState.attackMove(this);
-			} else if ( inRange(enemy, attackComponent.AttackRange) ) {
-				if ( !attacking ) {
+			} else if ( attackComponent.AttackRange ) {
+				if ( !attackComponent.Attacking ) {
 					currentState.attack(this);
 				}
-			} else if ( inRange(enemy, attackComponent.SeeRange) ) {
+			} else if ( inRange(enemy, navComponent.SeeRange) ) {
 				currentState.chase(this, enemy.transform);
 			} else if ( checkType(typeof(ATTACKING)) ) {
 				currentState = new IDLE();
@@ -105,7 +112,7 @@ namespace EnumExtension {
 				}
 			}
 			if ( checkType(typeof(ATTACKMOVE)) || checkType(typeof(MOVE)) ) {
-				if ( V2Equal() ) {
+				if ( navComponent.ReachedDestination() ) {
 					stop();
 					currentState = new IDLE();
 				}
@@ -121,7 +128,7 @@ namespace EnumExtension {
 			case Transitions.A:
 				if ( Input.GetMouseButtonDown(0) ) {
 					transition = Transitions.AM0;
-				} else if ( Input.GetKeyDown("A") ) {
+				} else if ( Input.GetKeyDown("a") ) {
 					transition = Transitions.NULL;
 				}
 				break;
@@ -171,58 +178,54 @@ namespace EnumExtension {
 			return Vector3.Distance(transform.position, enemyTransform.position) <= range;
 		}
 
-		private bool V3Equal() {
-			if (!agent.pathPending && 
-				agent.remainingDistance <= agent.stoppingDistance && 
-				(agent.velocity.sqrMagnitude == 0f)) {
-
-				return true;
-			}
-			Debug.Log(agent.velocity.sqrMagnitude);
-			return false;
-		}
-
-		private bool V2Equal() {
-			if ( !agent.pathPending ) {
-				return agent.pathStatus == NavMeshPathStatus.PathComplete && !agent.hasPath;
-			}
-			return false;
-		}
-
-		private IEnumerator startAttackTimer() {
-			yield return new WaitForSeconds(attackComponent.StunTime);
-			attacking = false;
-		}
-
 		public void setCurrentState (State state) {
 			this.currentState = state;
 		}
 
 		public void move() {
-			// If the click was on an object then set the agent's
-			// destination to the point where the click occurred.
 			var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
 			if ( Physics.Raycast(ray, out hit) ) {
-				agent.SetDestination(hit.point);
 				animator.SetBool("Running", true);
+				agent.SetDestination(hit.point);
 			}
 		}
 
 		public void attack() {
 			animator.SetTrigger("Attack1Trigger");
-			//enemy.GetComponent<MonsterScript>().Health.GetHit(attackComponent.Damage);
-			attackComponent.attack(enemy.GetComponent<MonsterScript>().Health);
-			attacking = true;
 			StartCoroutine(startAttackTimer());
+			enemy = FindClosestEnemy();
+			attackComponent.attack(enemy.GetComponent<MonsterScript>().Health);
 		}
 		
 		public void stop() {
+			navComponent.MoveTo(transform.position);
 			animator.SetBool("Running", false);
 		}
 
 		public void moveTo(Vector3 position) {
-			agent.SetDestination(position);
+			navComponent.MoveTo(position);
+		}
+
+		private IEnumerator startAttackTimer() {
+			yield return new WaitForSeconds(attackComponent.StunTime);
+			attackComponent.Attacking = false;
+		}
+
+		void FixedUpdate() {
+			attackComponent.AttackRange = false;
+		}
+
+		void OnTriggerEnter(Collider other) {
+			if ( other.tag == "Enemy" ) {
+				attackComponent.AttackRange = true;
+			}
+		}
+
+		void OnTriggerStay(Collider other) {
+			if ( other.tag == "Enemy" ) {
+				attackComponent.AttackRange = true;
+			}
 		}
 	}
 }

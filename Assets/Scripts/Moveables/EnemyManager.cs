@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class EnemyManager : LevelManager {
@@ -9,9 +10,8 @@ public class EnemyManager : LevelManager {
 	private float initialSpeed = 5f;
 
 	public Camera mainCamera;
-	public Transform player;
-	MonsterScript leftMonster;
-	MonsterScript rightMonster;
+	public EnumExtension.WarriorAnimation player;
+	public GameObject healthBar;
 
 	enum spawnPoint {
 		LEFT = 0,
@@ -21,16 +21,16 @@ public class EnemyManager : LevelManager {
 	private Transform[] spawnPoints = new Transform[2];
 	private bool callStart = false;
 
-	void Awake() {
+	public void Awake() {
 		spawnPoints[(int)spawnPoint.LEFT] = GameObject.Find("EnemyLeftSpawnPoints").transform;
 		spawnPoints[(int)spawnPoint.RIGHT] = GameObject.Find("EnemyRightSpawnPoints").transform;
 	}
 
-	void Start() {
+	public void Start() {
 		InvokeRepeating("Spawn", 0, spawnTime);
 	}
 
-	void Update() {
+	public void Update() {
 		switch (callStart) {
 			case true:
 				if(WaveManager.isSpawning)
@@ -49,21 +49,7 @@ public class EnemyManager : LevelManager {
 		}
 	}
 
-	void Spawn() {
-		GameObject left = (GameObject) Instantiate(enemy, spawnPoints[(int)spawnPoint.LEFT].position, spawnPoints[(int)spawnPoint.LEFT].rotation);
-		left.GetComponent<HealthBarScript>().MainCamera = mainCamera;
-		leftMonster = left.GetComponent<MonsterScript>();
-		NavigationFactory.CreateLeftEnemy(leftMonster, player);
-
-		GameObject right = (GameObject) Instantiate(enemy, spawnPoints[(int)spawnPoint.RIGHT].position, spawnPoints[(int)spawnPoint.RIGHT].rotation);
-		right.GetComponent<HealthBarScript>().MainCamera = mainCamera;
-		rightMonster = right.GetComponent<MonsterScript>();
-		NavigationFactory.CreateRightEnemy(rightMonster, player);
-
-		ScaleEnemies(initialHealth, initialSpeed);
-	}
-
-	void ScaleEnemies(float healthScale, float speedScale) {
+	private void ScaleEnemies(MonsterScript monster, float healthScale, float speedScale) {
 		healthScale = healthScale * waveCount;
 		//speedScale = speedScale + waveCount;
 		leftMonster.Health.UpdateHealth(healthScale, healthScale);
@@ -100,5 +86,22 @@ public class EnemyManager : LevelManager {
 				CancelInvoke();
 				break;
 		}
+	}
+
+	private MonsterScript Setup(Transform point) {
+		GameObject left = (GameObject) Instantiate(enemy, point.position, point.rotation);
+		MonsterScript monster = left.GetComponent<MonsterScript>();
+		GameObject healthBarObject = (GameObject) Instantiate(healthBar, new Vector3(0,0,0), new Quaternion(0,0,0,0));
+		healthBarObject.transform.SetParent(left.transform);
+		healthBarObject.transform.localPosition = new Vector3(0,3,0);
+		Image image = healthBarObject.GetComponentInChildren<Image>();
+		monster.Health.HealthBar = new HealthBarScript(mainCamera, healthBarObject, image);
+		ScaleEnemies(monster, initialHealth, initialSpeed);
+		return monster;
+	}
+
+	private void Spawn() {
+		NavigationFactory.CreateLeftEnemy(Setup(spawnPoints[(int)spawnPoint.LEFT]), player);
+		NavigationFactory.CreateRightEnemy(Setup(spawnPoints[(int)spawnPoint.RIGHT]), player);
 	}
 }

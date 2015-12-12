@@ -2,110 +2,43 @@
 using System.Collections;
 
 public class NavigationComponent {
-	enum States {
-		ATTACKING,
-		IDLE,
-		CHASING
-	}
-
-	private float range = 14; // 7 TODO: public is only for debug
-	private float min_range = 1.5f; // TODO: public is only for debug
-	
-	private const int maxWaypoints = 6;
-	private int currentWayPoint = 0;
-
-	private Transform player;
-	private GameObject target;
-	private Transform[] wayPoints;
 	private NavMeshAgent agent;
-	private States state = States.IDLE;
 	private Animator animator;
+	private float seeRange = 7;
 
-	private MonsterScript monster;
+	public float SeeRange {
+		get {
+			return seeRange;
+		}
+		set {
+			seeRange = value;
+		}
+	}
 
-	public NavigationComponent(NavMeshAgent agent, MonsterScript monster, Transform[] wayPoints, GameObject target, Transform player) {
+	public NavigationComponent(NavMeshAgent agent, Animator animator) {
 		this.agent = agent;
-		this.monster = monster;
-		this.wayPoints = wayPoints;
-		this.target = target;
-		this.player = player;
-	}
-
-	public void OnTriggerEnter(Collider trigger) {
-		if ( trigger.gameObject.tag == "WayPoint" ) {
-			currentWayPoint++;
-		}
-	}
-
-	// Update is called once per frame
-	public void Update() {
-		if (animator && !animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1")) {
-			return;
-		}
-		switchingState(state, inRange()); // Updating state
-		switch (state) {
-		case States.ATTACKING:
-			attack();
-			break;
-		case States.CHASING:
-			chase();
-			break;
-		case States.IDLE:
-			idle();
-			break;
-		default:
-			return;
-		}
-	}
-
-	private void idle() {
-		if ( currentWayPoint >= maxWaypoints ) {
-			agent.SetDestination(target.transform.position);
-		} else {
-			agent.SetDestination(wayPoints[currentWayPoint].transform.position);
-		}
-	}
-
-	private void chase() {
-		agent.SetDestination(player.position);
+		this.animator = animator;
 	}
 	
-	private void attack() {
+	public void MoveTo(Vector3 position) {
+		SetRunning(true);
+		agent.SetDestination(position);
+	}
+
+	public void Stop() {
+		SetRunning(false);
+	}
+
+	public void SetRunning(bool running) {
 		if ( animator ) {
-			animator.SetTrigger("Attack1Trigger");
+			animator.SetBool("Running", running);
 		}
 	}
 
-	private void switchingState(States from, States to) {
-		if ( from == to ) {
-			return;
+	public bool ReachedDestination() {
+		if ( !agent.pathPending ) {
+			return agent.pathStatus == NavMeshPathStatus.PathComplete && !agent.hasPath;
 		}
-		state = to;
-		
-		switch(from) {
-		case States.CHASING:
-			if ( animator ) {
-				animator.SetBool("Running", false);
-			}
-			agent.SetDestination(monster.transform.position);
-			break;
-		}
-		
-		switch(to) {
-		case States.CHASING:
-			if ( animator ) {
-				animator.SetBool("Running", true);
-			}
-			break;
-		}
+		return false;
 	}
-	
-	private States inRange() {
-		float distance = Vector3.Distance(monster.transform.position, player.position);
-		return distance <= range && distance > min_range ?
-			States.CHASING : distance <= min_range ?
-			States.ATTACKING : States.IDLE
-		;
-	}
-
 }

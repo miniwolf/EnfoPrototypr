@@ -3,16 +3,30 @@ using System.Collections;
 using EnumExtension;
 
 public class MonsterScript : Clickable {
-	private NavigationComponent nav;
+	enum States {
+		ATTACKING,
+		IDLE,
+		CHASING
+	}
+	
 	private GameObject attackCircle;
-	//private HealthComponent health;
 	private NavMeshAgent agent;
 	private Rigidbody rb;
 	private CapsuleCollider capsuleCol;
 	private float sinkSpeed;
 	private bool rewardExp = true;
+	private States state = States.IDLE;
+	private NavigationComponent navigationComponent;
+	private AttackComponent attackComponent;
+	private Animator animator;
+	private WarriorAnimation player;
+	private Transform playerTransform;
+	private GameObject target;
+	private Transform[] wayPoints;
+	private const int maxWaypoints = 6;
+	private int currentWayPoint = 0;
 
-
+<<<<<<< HEAD
 	private bool isRightClicked = false;
 
 	public NavigationComponent Nav {
@@ -37,14 +51,36 @@ public class MonsterScript : Clickable {
 
 		health = new HealthComponent();
 		health.HealthBar = GetComponent<HealthBarScript>();
+=======
+	public Transform[] WayPoints {
+		set {
+			this.wayPoints = value;
+		}
 	}
 
-	/*test*/
-	private WarriorAnimation character;
-	/*endoftest*/
+	public GameObject Target {
+		set {
+			this.target = value;
+		}
+>>>>>>> Modify characters to be self sustaining whilst not selected.
+	}
+
+	public WarriorAnimation Player {
+		set {
+			this.player = value;
+			this.playerTransform = player.transform;
+		}
+	}
+
+	public NavigationComponent NavComponent {
+		set {
+			this.navigationComponent = value;
+		}
+	}
 
 	// Use this for initialization
 	void Start() {
+<<<<<<< HEAD
 		/*test*/
 		character = GameObject.Find("NinjaContainer").GetComponent<WarriorAnimation>();
 		/*endOfTest*/
@@ -80,18 +116,64 @@ public class MonsterScript : Clickable {
 	}
 
 	void Update() {
-		if (health.Health <= 0) {
-			if (rewardExp) {
-				character.Experience.addExp(101, character.Health, character.Attack);
+		
+=======
+		animator = GetComponent<Animator>();
+		NavMeshAgent agent = GetComponent<NavMeshAgent>();
+		attackComponent = new AttackComponent(animator);
+		navigationComponent = new NavigationComponent(agent, animator);
+		navigationComponent.SeeRange = 7;
+		currentMana = 0;
+		maxMana = 0;
+		healthComponent.CurrentHealth = 20;
+		healthComponent.MaxHealth = 20;
+		characterName = "Arthas";
+		className = "Dark Knight";
+		experienceComponent.CurrentLevel = 1;
+		experienceComponent.MaxLevel = 1;
+		experienceComponent.CurrentExp = 0;
+		experienceComponent.MaxExp = 100;
+		selectedCircle = this.gameObject.transform.FindChild("SelectedCircle").gameObject;
+		picture = Resources.Load<Sprite>("Icons/arthas");
+	}
+
+	public void Update() {
+		if ( health.Health <= 0 ) {
+			if ( rewardExp ) {
+				player.Experience.addExp(101, player.Health, player.Attack);
 				rewardExp = false;
 			}
 			SinkAndDestroy();
 			return;
 		}
-		if(isRightClicked){
+		if ( isRightClicked ) {
 			fadeCircle();
 		}
-		nav.Update();
+		if ( animator && !animator.GetCurrentAnimatorStateInfo(0).IsName("Attack1") ) {
+			return;
+		}
+		state = inRange(); // Updating state
+		switch (state) {
+		case States.ATTACKING:
+			if ( !attackComponent.Attacking ) {
+				navigationComponent.MoveTo(transform.position);
+				navigationComponent.Stop();
+				attackComponent.attack(player.Health);
+				StartCoroutine(startAttackTimer());
+			}
+			break;
+		case States.CHASING:
+			navigationComponent.MoveTo(playerTransform.position);
+			break;
+		case States.IDLE:
+			idle();
+			break;
+		}
+		healthComponent.Update();
+	}
+
+	void FixedUpdate() {
+		attackComponent.AttackRange = false;
 	}
 
 	public void rightClicked() {
@@ -103,11 +185,48 @@ public class MonsterScript : Clickable {
 	}
 
 	void OnTriggerEnter(Collider trigger) {
-		nav.OnTriggerEnter(trigger);
+		if ( trigger.tag == "WayPoint" ) {
+			currentWayPoint++;
+		} else if ( trigger.tag == "Player" ) {
+			attackComponent.AttackRange = true;
+		}
+	}
+
+	void OnTriggerStay(Collider other) {
+		if ( other.tag == "Player" ) {
+			attackComponent.AttackRange = true;
+		}
+	}
+
+	private IEnumerator startAttackTimer() {
+		yield return new WaitForSeconds(attackComponent.StunTime);
+		attackComponent.Attacking = false;
+	}
+
+	private States inRange() {
+		if ( attackComponent.AttackRange ) {
+			return States.ATTACKING;
+		}
+
+		float distance = Vector3.Distance(transform.position, playerTransform.position);
+		if (distance <= navigationComponent.SeeRange) {
+			return States.CHASING;
+		} else {
+			return States.IDLE;
+		}
+	}
+	
+	// Update is called once per frame
+	private void idle() {
+		if ( currentWayPoint >= maxWaypoints ) {
+			navigationComponent.MoveTo(target.transform.position);
+		} else {
+			navigationComponent.MoveTo(wayPoints[currentWayPoint].transform.position);
+		}
 	}
 
 	void SinkAndDestroy() {
-		agent.enabled = false;
+		//agent.enabled = false;
 		rb.isKinematic = true;
 		capsuleCol.enabled = false;
 		gameObject.transform.Translate(-Vector3.up * sinkSpeed * Time.deltaTime);
