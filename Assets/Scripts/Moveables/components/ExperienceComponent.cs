@@ -7,6 +7,13 @@ public class ExperienceComponent {
 	private int level = 1;
 	private int maxLevel = 20;
 	private float experienceGrowthRatio = 2f;
+	private HealthComponent healthComponent;
+	private AttackComponent attackComponent;
+
+	public ExperienceComponent(HealthComponent healthComponent, AttackComponent attackComponent) {
+		this.healthComponent = healthComponent;
+		this.attackComponent = attackComponent;
+	}
 
 	public int CurrentExp {
 		get {
@@ -54,20 +61,21 @@ public class ExperienceComponent {
 		return maxLevel;
 	}
 
-	public void addExp(int experience, HealthComponent characterHealth, AttackComponent characterAttack) {
-		int levelDifference = level;
-		exp += experience;
+	private void levelUp() {
 		while ( exp > maxExp && level < maxLevel ) {
 			exp -= maxExp;
 			maxExp = Mathf.FloorToInt(maxExp * experienceGrowthRatio);
 			level++;
 		}
-		levelDifference = level - levelDifference;
-		if(levelDifference > 0){
-			LevelingManager.levelUp(levelDifference, characterHealth,characterAttack);
+	}
+
+	public void addExp(int experience) {
+		int levelDifference = level;
+		exp += experience;
+		levelUp();
+		if ( level - levelDifference > 0 ) {
+			LevelingManager.levelUp(levelDifference, healthComponent, attackComponent);
 		}
 		UIManager.setInfoChanged(true);
 	}
-
-
 }

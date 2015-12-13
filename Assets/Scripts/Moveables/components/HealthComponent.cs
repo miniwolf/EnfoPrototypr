@@ -10,7 +10,6 @@ public class HealthComponent {
 		get {
 			return health;
 		}
-
 		set {
 			health = value;
 		}
@@ -40,8 +39,7 @@ public class HealthComponent {
 		}
 	}
 
-	public void UpdateHealth(float newMaxHealth, float newHealth)
-	{
+	public void UpdateHealth(float newMaxHealth, float newHealth) {
 		maxHealth = newMaxHealth;
 		health = newHealth;
 		healthBar.SetHealth(health, maxHealth);
@@ -57,4 +55,3 @@ public class HealthComponent {
 		healthBar.Update();
 	}
 }
-	

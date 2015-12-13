@@ -49,6 +49,7 @@ public class AttackComponent {
 	}
 
 	public void attack(HealthComponent healthComponent) {
+		AnimateAttack();
 		healthComponent.GetHit(damage);
 		attacking = true;
 		UIManager.setInfoChanged(true);

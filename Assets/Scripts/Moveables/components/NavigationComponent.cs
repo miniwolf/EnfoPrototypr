@@ -10,9 +10,6 @@ public class NavigationComponent {
 		get {
 			return seeRange;
 		}
-		set {
-			seeRange = value;
-		}
 	}
 
 	public NavigationComponent(NavMeshAgent agent, Animator animator) {
@@ -40,5 +37,9 @@ public class NavigationComponent {
 			return agent.pathStatus == NavMeshPathStatus.PathComplete && !agent.hasPath;
 		}
 		return false;
+	}
+
+	public void Disable() {
+		agent.enabled = false;
 	}
 }

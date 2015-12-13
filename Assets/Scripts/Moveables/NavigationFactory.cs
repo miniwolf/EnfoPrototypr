@@ -11,10 +11,6 @@ public class NavigationFactory : MonoBehaviour {
 		wayPoints[3] = GameObject.Find("WayPoint4L").transform;
 		wayPoints[4] = GameObject.Find("WayPoint5L").transform;
 		wayPoints[5] = GameObject.Find("WayPoint6L").transform;
-		
-		GameObject target = GameObject.Find("Target");
-		monster.Target = target;
-		monster.Player = player;
 		monster.WayPoints = wayPoints;
 	}
 
@@ -26,10 +22,6 @@ public class NavigationFactory : MonoBehaviour {
 		wayPoints[3] = GameObject.Find("WayPoint4R").transform;
 		wayPoints[4] = GameObject.Find("WayPoint5R").transform;
 		wayPoints[5] = GameObject.Find("WayPoint6R").transform;
-		
-		GameObject target = GameObject.Find("Target");
-		monster.Target = target;
-		monster.Player = player;
 		monster.WayPoints = wayPoints;
 	}
 }

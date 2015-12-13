@@ -8,50 +8,22 @@ public class MonsterScript : Clickable {
 		IDLE,
 		CHASING
 	}
-	
-	private GameObject attackCircle;
-	private NavMeshAgent agent;
-	private Rigidbody rb;
-	private CapsuleCollider capsuleCol;
-	private float sinkSpeed;
-	private bool rewardExp = true;
+
 	private States state = States.IDLE;
+	private GameObject attackCircle;
+	private GameObject target;
+	private Transform[] wayPoints;
+	private NavMeshAgent agent;
+	private bool rewardExp = true;
 	private NavigationComponent navigationComponent;
 	private AttackComponent attackComponent;
 	private Animator animator;
 	private WarriorAnimation player;
 	private Transform playerTransform;
-	private GameObject target;
-	private Transform[] wayPoints;
 	private const int maxWaypoints = 6;
 	private int currentWayPoint = 0;
-
-<<<<<<< HEAD
 	private bool isRightClicked = false;
 
-	public NavigationComponent Nav {
-		set {
-			nav = value;
-		}
-	}
-	
-	public HealthComponent Health {
-		get
-		{
-			return health;
-		}
-	}
-
-	// Use this for initialization
-	void Awake() {
-		sinkSpeed = 6f;
-		agent = GetComponent<NavMeshAgent>();
-		rb = GetComponent<Rigidbody>();
-		capsuleCol = GetComponent<CapsuleCollider>();
-
-		health = new HealthComponent();
-		health.HealthBar = GetComponent<HealthBarScript>();
-=======
 	public Transform[] WayPoints {
 		set {
 			this.wayPoints = value;
@@ -62,7 +34,12 @@ public class MonsterScript : Clickable {
 		set {
 			this.target = value;
 		}
->>>>>>> Modify characters to be self sustaining whilst not selected.
+	}
+
+	public AttackComponent Attack {
+		get {
+			return attackComponent;
+		}
 	}
 
 	public WarriorAnimation Player {
@@ -79,25 +56,21 @@ public class MonsterScript : Clickable {
 	}
 
 	// Use this for initialization
-	void Start() {
-<<<<<<< HEAD
-		/*test*/
-		character = GameObject.Find("NinjaContainer").GetComponent<WarriorAnimation>();
-		/*endOfTest*/
-		attackCircle = gameObject.transform.FindChild("AttackCircle").gameObject;
-		//health = new HealthComponent();
-		//health.HealthBar = GetComponent<HealthBarScript>();
-		experience = new ExperienceComponent();
+	public void Start() {
+		Animator animator = GetComponent<Animator>();
+		attackComponent = new AttackComponent(animator);
+		NavMeshAgent agent = GetComponent<NavMeshAgent>();
+		navigationComponent = new NavigationComponent(agent, animator);
+		experienceComponent = new ExperienceComponent(healthComponent, attackComponent);
 		maxMana = 0;
-		//health.MaxHealth = 15;
 		currentMana = 0;
-		//health.CurrentHealth = 15;
 		characterName = "Orc";
 		className = "Warrior";
-		experience.CurrentLevel = 1;
-		experience.MaxLevel = 1;
-		experience.CurrentExp = 0;
-		experience.MaxExp = 100;
+		experienceComponent.CurrentLevel = 1;
+		experienceComponent.MaxLevel = 1;
+		experienceComponent.CurrentExp = 0;
+		experienceComponent.MaxExp = 100;
+		attackCircle = gameObject.transform.FindChild("AttackCircle").gameObject;
 		selectedCircle = gameObject.transform.FindChild("SelectedCircle").gameObject;
 		picture = Resources.Load<Sprite>("Icons/orc");
 	}
@@ -115,32 +88,10 @@ public class MonsterScript : Clickable {
 
 	}
 
-	void Update() {
-		
-=======
-		animator = GetComponent<Animator>();
-		NavMeshAgent agent = GetComponent<NavMeshAgent>();
-		attackComponent = new AttackComponent(animator);
-		navigationComponent = new NavigationComponent(agent, animator);
-		navigationComponent.SeeRange = 7;
-		currentMana = 0;
-		maxMana = 0;
-		healthComponent.CurrentHealth = 20;
-		healthComponent.MaxHealth = 20;
-		characterName = "Arthas";
-		className = "Dark Knight";
-		experienceComponent.CurrentLevel = 1;
-		experienceComponent.MaxLevel = 1;
-		experienceComponent.CurrentExp = 0;
-		experienceComponent.MaxExp = 100;
-		selectedCircle = this.gameObject.transform.FindChild("SelectedCircle").gameObject;
-		picture = Resources.Load<Sprite>("Icons/arthas");
-	}
-
 	public void Update() {
-		if ( health.Health <= 0 ) {
+		if ( healthComponent.Health <= 0 ) {
 			if ( rewardExp ) {
-				player.Experience.addExp(101, player.Health, player.Attack);
+				player.Experience.addExp(101);
 				rewardExp = false;
 			}
 			SinkAndDestroy();
@@ -221,15 +172,16 @@ public class MonsterScript : Clickable {
 		if ( currentWayPoint >= maxWaypoints ) {
 			navigationComponent.MoveTo(target.transform.position);
 		} else {
-			navigationComponent.MoveTo(wayPoints[currentWayPoint].transform.position);
+			navigationComponent.MoveTo(wayPoints[currentWayPoint].position);
 		}
 	}
 
-	void SinkAndDestroy() {
-		//agent.enabled = false;
-		rb.isKinematic = true;
-		capsuleCol.enabled = false;
-		gameObject.transform.Translate(-Vector3.up * sinkSpeed * Time.deltaTime);
+	private void SinkAndDestroy() {
+		float sinkSpeed = 6f;
+		navigationComponent.Disable();
+		GetComponent<Rigidbody>().isKinematic = true;
+		GetComponent<CapsuleCollider>().enabled = false;
+		transform.Translate(-Vector3.up * sinkSpeed * Time.deltaTime);
 		Destroy(gameObject, 2f);
 	}
 }

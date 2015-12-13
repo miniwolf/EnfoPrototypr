@@ -4,11 +4,6 @@ using UnityEngine.UI;
 using EnumExtension;
 
 public class UIManager : MonoBehaviour {
-	private RaycastHit hit;
-	private Ray ray;
-	private Camera mCamera;
-	private Clickable click;
-
 	public Text healthText;
 	public Text manaText;
 	public Text name;
@@ -16,15 +11,17 @@ public class UIManager : MonoBehaviour {
 	public static Text gold;
 	public static Text baseHealth;
 	public Image picture;
-
 	public Slider experienceBar;
-
-	private static GameObject itemDescriptionPanel;
-	private static Text itemDescriptionText;
-
 	public GameObject mainCamera;
 	public ActionInspectorScript actionInspector;
-	public static InventoryScript inventory;
+
+	private Camera mCamera;
+	private Clickable click;
+
+	private static InventoryScript inventory;
+	private static GameObject itemDescriptionPanel;
+	private static Text itemDescriptionText;
+	private static Text damageText;
 
 	private static bool infoChanged = false;
 
@@ -34,19 +31,23 @@ public class UIManager : MonoBehaviour {
 		mCamera = mainCamera.GetComponent<Camera>();
 		itemDescriptionPanel = GameObject.Find("ButtonDescriptionPanel");
 		itemDescriptionText = GameObject.Find("ButtonDescriptionText").GetComponent<Text>();
+		damageText = GameObject.Find("DamageText").GetComponent<Text>();
 		inventory = GameObject.Find("InventoryPanel").GetComponent<InventoryScript>();
 		gold = GameObject.Find("GoldText").GetComponent<Text>();
 		baseHealth = GameObject.Find("BaseHealthText").GetComponent<Text>();
 		DeactivateInfo();
 
 		click = GameObject.Find("NinjaContainer").GetComponent<WarriorAnimation>();
-		click.activateSelectedCircle();
+		click.SetSelectedCircle(true);
 		healthText.text = click.getCurrentHealth() + "/" + click.getMaxHealth();
 		manaText.text = click.getCurrentMana() + "/" + click.getMaxMana();
 		name.text = click.getName();
 		picture.sprite = click.getPicure();
 		actionInspector.AddAllButtons(click.getButtons());
-		
+
+		if ( click is WarriorAnimation ) {
+			damageText.text = "Damage: " + ((WarriorAnimation) click).Attack.Damage;
+		}
 		experienceBar.maxValue = click.getMaxExp();
 		experienceBar.value = click.getCurrentExp();
 		levelAndClassText.text = "Level " +click.getCurrentLevel() + " " + click.getClassName();
@@ -55,39 +56,51 @@ public class UIManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if ( Input.GetMouseButton(0) ) {
-			this.ray = mCamera.ScreenPointToRay(Input.mousePosition);
-			if(Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Clickable"))){
+			Ray ray = mCamera.ScreenPointToRay(Input.mousePosition);
+			RaycastHit hit;
+			if ( Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Clickable")) ) {
 				/*if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()){
 					return;
 				}*/
 				DeactivateInfo();
 				actionInspector.ResetButtons();
 				click = hit.transform.gameObject.GetComponent<Clickable>();
-				click.SetSelectedCircle(true);
-				healthText.text = click.getCurrentHealth() + "/" + click.getMaxHealth();
-				manaText.text = click.getCurrentMana() + "/" + click.getMaxMana();
-				name.text = click.getName();
-				picture.sprite = click.getPicure();
-				actionInspector.AddAllButtons(click.getButtons());
-
-				experienceBar.maxValue = click.getMaxExp();
-				experienceBar.value = click.getCurrentExp();
-				levelAndClassText.text = "Level " + click.getCurrentLevel() + " " + click.getClassName();
-
+				SetupUIForClick();
 			}
 		}
-		if ( Input.GetMouseButton(1) ) {
-			if ( click.isSelected() && click.tag == "Player" ) {
-				this.ray = mCamera.ScreenPointToRay(Input.mousePosition);
-				if ( Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Clickable")) &&
-					 hit.transform.gameObject.tag == "Enemy") {
-					hit.transform.gameObject.GetComponent<MonsterScript>().rightClicked();
-				}
-			}
 
-		}
 		if ( infoChanged ) {
 			updateCharacterInfo();
+		}
+		CheckForTooltip();
+	}
+
+	private void CheckForTooltip () {
+		Ray ray = mCamera.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+		if ( Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("UI")) ) {
+			Debug.Log("Found UI");
+			if ( hit.collider.name.Equals("ActionButton(clone)") ) {
+				Debug.Log("Found one");
+			}
+		}
+	}
+
+	private void SetupUIForClick() {
+		click.SetSelectedCircle(true);
+		healthText.text = click.getCurrentHealth() + "/" + click.getMaxHealth();
+		manaText.text = click.getCurrentMana() + "/" + click.getMaxMana();
+		name.text = click.getName();
+		picture.sprite = click.getPicure();
+		actionInspector.AddAllButtons(click.getButtons());
+
+		experienceBar.maxValue = click.getMaxExp();
+		experienceBar.value = click.getCurrentExp();
+		levelAndClassText.text = "Level " + click.getCurrentLevel() + " " + click.getClassName();
+		if ( click is WarriorAnimation ) {
+			damageText.text = "Damage: " + ((WarriorAnimation) click).Attack.Damage;
+		} else if ( click is MonsterScript ) {
+			damageText.text = "Damage: " + ((MonsterScript) click).Attack.Damage;
 		}
 	}
 
@@ -146,6 +159,7 @@ public class UIManager : MonoBehaviour {
 		experienceBar.value = 0;
 		itemDescriptionPanel.SetActive(false);
 		itemDescriptionText.text = "";
+		damageText.text = "";
 	}
 	
 	public static void setBaseHealthText(string healthText) {

@@ -2,48 +2,56 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class WaveManager : LevelManager {
-	public Text waveText;
-	public static bool isSpawning = true;
+public class WaveManager : MonoBehaviour {
+	private Text waveText;
 	private bool gameIsWon;
-	private int waveSpawningTime = 30;
 	private int waveWaitingTime = 20;
-	public int maxWaves = 4;
+	private float waveTime = waveSpawningTime;
+
+	private static int waveSpawningTime = 30;
+	private static int maxWaves = 4;
+	private static bool isSpawning = true;
+	private static int waveCount = 1;
+
+	public static int MaxWaves {
+		get {
+			return maxWaves;
+		}
+	}
+
+	public static bool IsSpawning {
+		get {
+			return isSpawning;
+		}
+	}
+
+	public static int WaveCount {
+		get {
+			return waveCount;
+		}
+	}
 
 	void Start() {
-		waveCount = 1;
-		waveTime = waveSpawningTime;
+		waveText = GetComponentInChildren<Text>();
 	}
 
 	// Update is called once per frame
 	void Update () {
 		waveTime -= Time.deltaTime;
 
-		switch (isSpawning) {
-			case true:
-				if(waveTime > 0) {
-					waveText.text = "Wave " + waveCount + " - " + waveTime.ToString("0") + " s";
+		if ( waveTime > 0 ) {
+			waveText.text = (isSpawning ? "Wave " + waveCount + " - " : "Next wave ") +
+							waveTime.ToString("0") + " s";
+		} else {
+			waveTime = isSpawning ? waveWaitingTime : waveSpawningTime;
+			if ( !isSpawning ) {
+				if ( ++waveCount >= maxWaves ) {
+					waveText.text = "FINAL WAVE";
+					enabled = false; // Disables the Update() function
+					return;
 				}
-				else {
-					isSpawning = false;
-					waveTime = waveWaitingTime;
-				}
-				break;
-			case false:
-				if (waveTime > 0) {
-					waveText.text = "Next wave " + waveTime.ToString("0") + " s";
-				}
-				else {
-					waveCount++;
-					isSpawning = true;
-					waveTime = waveSpawningTime;
-					if (waveCount >= maxWaves) {
-						waveText.text = "FINAL WAVE";
-						enabled = false; // Disables the Update() function
-						break;
-					}
-				}
-				break;
+			}
+			isSpawning = !isSpawning;
 		}
 	}
 }

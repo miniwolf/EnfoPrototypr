@@ -1,16 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace EnumExtension {
 	public class State {
 		public virtual void doMove(WarriorAnimation anim) {
-			//if (hit a creature) {
-			// state = States.ATTACKING;
-			//} else {
 			anim.move();
 			anim.setCurrentState(new MOVE());
-			//}
 		}
 
 		public virtual void attackMove(WarriorAnimation anim) {
@@ -18,24 +15,44 @@ namespace EnumExtension {
 			anim.setCurrentState(new ATTACKMOVE());
 		}
 
-		public virtual void attack(WarriorAnimation anim) {
+		public virtual void attack(WarriorAnimation anim, GameObject enemy) {
 			anim.stop();
-			anim.attack();
+			anim.attack(enemy);
 			anim.setCurrentState(new ATTACKING());
 		}
 
-		public virtual void chase(WarriorAnimation anim, Transform target) {
-			anim.moveTo(target.position);
-			anim.setCurrentState(new ATTACKING());
+		public virtual void chase(WarriorAnimation anim, GameObject enemy) {
+			if ( enemy == null ) {
+				enemy = anim.FindClosestEnemy();
+			}
+			anim.Enemy = enemy;
+			anim.moveTo(enemy.transform.position);
+			anim.setCurrentState(new CHASING());
 		}
 	}
 
 	class ATTACKING : State { }
+	class CHASING : State {
+		public override void chase(WarriorAnimation anim, GameObject enemy) {
+			if ( enemy != null ) {
+				base.chase(anim, enemy);
+			}
+		}
+		public override void attack(WarriorAnimation anim, GameObject enemy) {
+			if ( anim.isInAttackRange(enemy) ) {
+				base.attack(anim, enemy);
+			}
+		}
+	}
 	class ATTACKMOVE : State { }
 	class IDLE : State { }
 	class MOVE : State {
-		public override void attack(WarriorAnimation anim) { }
-		public override void chase(WarriorAnimation anim, Transform target) { }
+		public override void attack(WarriorAnimation anim, GameObject enemy) { }
+		public override void chase(WarriorAnimation anim, GameObject enemy) {
+			if ( enemy != null ) {
+				base.chase(anim, enemy);
+			}
+		}
 	}
 
 	public enum Transitions {
@@ -56,6 +73,13 @@ namespace EnumExtension {
 		private GameObject enemy;
 		private AttackComponent attackComponent;
 		private NavigationComponent navComponent;
+		private List<GameObject> inAttackRange = new List<GameObject>();
+
+		public ExperienceComponent Experience {
+			get {
+				return experienceComponent;
+			}
+		}
 
 		public AttackComponent Attack {
 			get {
@@ -63,7 +87,16 @@ namespace EnumExtension {
 			}
 		}
 
-		void Start() {
+		public GameObject Enemy {
+			get {
+				return enemy;
+			}
+			set {
+				enemy = value;
+			}
+		}
+
+		void Awake() {
 			agent = GetComponent<NavMeshAgent>();
 
 			GameObject healthBarObject = (GameObject) Instantiate(healthBar, new Vector3(), new Quaternion());
@@ -71,45 +104,65 @@ namespace EnumExtension {
 			healthBarObject.transform.localPosition = new Vector3(0, 3.0f, 0);
 			Image image = healthBarObject.GetComponentInChildren<Image>();
 			healthComponent.HealthBar = new HealthBarScript(mainCamera, healthBarObject, image);
-			experienceComponent = new ExperienceComponent();
 			attackComponent = new AttackComponent(animator);
+			experienceComponent = new ExperienceComponent(healthComponent, attackComponent);
 			navComponent = new NavigationComponent(agent, animator);
 
-			healthComponent.MaxHealth = 100;
-			healthComponent.CurrentHealth = 100;
+			healthComponent.MaxHealth = 10;
+			healthComponent.CurrentHealth = 10;
 			maxMana = 50;
 			currentMana = 50;
 			characterName = "Hattori";
 			className = "Ninja";
 			picture = Resources.Load<Sprite>("Icons/ninjaHead");
 			buttons = null;
-			selectedCircle = this.gameObject.transform.FindChild("SelectedCircle").gameObject;
+			selectedCircle = transform.FindChild("SelectedCircle").gameObject;
+		}
+
+		void ResetCharacter() {
+			healthComponent.CurrentHealth = healthComponent.MaxHealth;
+			transform.localPosition = new Vector3(5, 0, 100);
+			moveTo(transform.position);
 		}
 		
 		void Update() {
-			if ( selectedCircle.activeSelf ) {
+			if ( healthComponent.CurrentHealth <= 0 ) {
+				ResetCharacter();
+			}
+			if ( isSelected() ) {
 				switchTransition();
 			}
 			switchState();
-			Health.Update();
+			healthComponent.Update();
 		}
 
 		private void switchState() {
 			if ( transition == Transitions.M1 ) {
-				currentState.doMove(this);
+				Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+				RaycastHit hit;
+				if ( Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Clickable")) &&
+					hit.collider.tag == "Enemy") {
+					GameObject tempEnemy = hit.collider.gameObject;
+					tempEnemy.GetComponent<MonsterScript>().rightClicked();
+					currentState.chase(this, tempEnemy);
+				} else {
+					currentState.doMove(this);
+				}
 			} else if ( transition == Transitions.AM0 ) {
 				currentState.attackMove(this);
 			} else if ( attackComponent.AttackRange ) {
 				if ( !attackComponent.Attacking ) {
-					currentState.attack(this);
+					currentState.attack(this, enemy);
 				}
-			} else if ( inRange(enemy, navComponent.SeeRange) ) {
-				currentState.chase(this, enemy.transform);
+			} else if ( inRange(FindClosestEnemy(), navComponent.SeeRange) ) {
+				currentState.chase(this, null);
 			} else if ( checkType(typeof(ATTACKING)) ) {
-				currentState = new IDLE();
 				if ( enemy == null || enemy.GetComponent<MonsterScript>().Health.Health <= 0 ) {
 					currentState = new IDLE();
 				}
+			}
+			if ( checkType(typeof(CHASING)) ) {
+				navComponent.MoveTo(enemy.transform.position);
 			}
 			if ( checkType(typeof(ATTACKMOVE)) || checkType(typeof(MOVE)) ) {
 				if ( navComponent.ReachedDestination() ) {
@@ -147,7 +200,7 @@ namespace EnumExtension {
 		}
 
 		// TODO: Look at notes for better solution
-		private GameObject FindClosestEnemy() {
+		public GameObject FindClosestEnemy() {
 			// Find all game objects with tag Enemy
 			GameObject[] gos = GameObject.FindGameObjectsWithTag("Enemy");
 
@@ -156,6 +209,9 @@ namespace EnumExtension {
 			Vector3 position = transform.position;
 			GameObject closest = null;
 			foreach (GameObject go in gos) {
+				if ( go.GetComponent<MonsterScript>().Health.CurrentHealth <= 0 ) {
+					continue;
+				}
 				Vector3 diff = go.transform.position - position;
 				float curDistance = diff.sqrMagnitude;
 				if ( curDistance < distance ) { 
@@ -166,16 +222,13 @@ namespace EnumExtension {
 			return closest;
 		}
 
-		private bool inRange(GameObject target, float range) {
-			if ( target == null || !rangeCheck(target.transform, range) ) {
-				enemy = FindClosestEnemy();
-				return false;//rangeCheck(enemy.transform, range);
-			}
-			return true;
+		public bool isInAttackRange(GameObject target) {
+			return inAttackRange.Contains(target);
 		}
 
-		private bool rangeCheck(Transform enemyTransform, float range) {
-			return Vector3.Distance(transform.position, enemyTransform.position) <= range;
+		private bool inRange(GameObject target, float range) {
+			return target == null ? false : 
+				Vector3.Distance(transform.position, target.transform.position) <= range;
 		}
 
 		public void setCurrentState (State state) {
@@ -191,11 +244,9 @@ namespace EnumExtension {
 			}
 		}
 
-		public void attack() {
-			animator.SetTrigger("Attack1Trigger");
-			StartCoroutine(startAttackTimer());
-			enemy = FindClosestEnemy();
+		public void attack(GameObject enemy) {
 			attackComponent.attack(enemy.GetComponent<MonsterScript>().Health);
+			StartCoroutine(startAttackTimer());
 		}
 		
 		public void stop() {
@@ -214,17 +265,20 @@ namespace EnumExtension {
 
 		void FixedUpdate() {
 			attackComponent.AttackRange = false;
+			inAttackRange.Clear();
 		}
 
 		void OnTriggerEnter(Collider other) {
-			if ( other.tag == "Enemy" ) {
+			if ( other.tag == "Enemy" && other.gameObject.GetComponent<MonsterScript>().Health.CurrentHealth > 0 ) {
 				attackComponent.AttackRange = true;
+				inAttackRange.Add(other.gameObject);
 			}
 		}
 
 		void OnTriggerStay(Collider other) {
-			if ( other.tag == "Enemy" ) {
+			if ( other.tag == "Enemy" && other.gameObject.GetComponent<MonsterScript>().Health.CurrentHealth > 0 ) {
 				attackComponent.AttackRange = true;
+				inAttackRange.Add(other.gameObject);
 			}
 		}
 	}

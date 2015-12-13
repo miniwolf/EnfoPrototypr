@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class TutorialImageScript : MonoBehaviour {
-
 	public Canvas canvas;
 	public Image tutorialImage;
 	public Text tutorialText;
@@ -19,8 +18,7 @@ public class TutorialImageScript : MonoBehaviour {
 		OKtext = OKtext.GetComponent<Text>();
 	}
 
-	public void closeImage()
-	{
+	public void closeImage() {
 		Time.timeScale = 1.0f;
 		tutorialImage.enabled = false;
 		tutorialText.enabled = false;

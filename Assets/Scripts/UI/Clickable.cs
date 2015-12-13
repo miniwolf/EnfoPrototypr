@@ -5,7 +5,7 @@ using System;
 
 public class Clickable : MonoBehaviour {
 	protected HealthComponent healthComponent = new HealthComponent();
-	protected ExperienceComponent experienceComponent = new ExperienceComponent();
+	protected ExperienceComponent experienceComponent;
 	protected int maxMana;
 	protected int currentMana;
 
@@ -19,12 +19,6 @@ public class Clickable : MonoBehaviour {
 	public HealthComponent Health {
 		get {
 			return healthComponent;
-		}
-	}
-
-	public ExperienceComponent Experience {
-		get {
-			return experienceComponent;
 		}
 	}
 
@@ -69,32 +63,46 @@ public class Clickable : MonoBehaviour {
 	}
 
 	public int getMaxExp() {
-		return experienceComponent.getMaxExp();
+		if ( experienceComponent != null ) {
+			return experienceComponent.getMaxExp();
+		} else {
+			return 0;
+		}
 	}
 
 	public int getCurrentExp() {
-		return experienceComponent.getCurrentExp();
+		if ( experienceComponent != null ) {
+			return experienceComponent.getCurrentExp();
+		} else {
+			return 0;
+		}
 	}
 
 	public int getCurrentLevel() {
-		return experienceComponent.getCurrentLevel();
+		if ( experienceComponent != null ) {
+			return experienceComponent.getCurrentLevel();
+		} else {
+			return 0;
+		}
 	}
 
 	public int getMaxLevel() {
-		return experienceComponent.getMaxLevel();
+		if ( experienceComponent != null ) {
+			return experienceComponent.getMaxLevel();
+		} else {
+			return 0;
+		}
 	}
 
 	public GameObject instantiateButton(string resourcesPathToIcon, string description, bool isActionButton, Func<GameObject,bool> action, long price) {
 		GameObject go =(GameObject) GameObject.Instantiate(Resources.Load ("Prefabs/UI/ActionButton"),Vector3.zero,Quaternion.identity);
 		go.GetComponent<Image>().sprite = Resources.Load<Sprite>(resourcesPathToIcon);
 		ActionButtonScript actionButtonScript = go.GetComponent<ActionButtonScript>();
-		actionButtonScript.setDescription(description);
-		actionButtonScript.setIsActionButton(isActionButton);
-		actionButtonScript.setIsInShop(!isActionButton);
-		actionButtonScript.setPrice(price);
-
+		actionButtonScript.Description = description;
+		actionButtonScript.IsActionButton = isActionButton;
+		actionButtonScript.IsInShop = !isActionButton;
+		actionButtonScript.Price = price;
 		actionButtonScript.setAction(action);
-		//actionButtonScript.setAction(totalBaseRepair);
 		go.SetActive(false);
 		return go;
 	}
@@ -102,6 +110,19 @@ public class Clickable : MonoBehaviour {
 	/*Here there will be functions which the buttons can have*/
 	public static bool totalBaseRepair(GameObject button) {
 		UIManager.setBaseHealthText("Base: 30/30");
+		UIManager.removeButtonFromInventory(button);
+		return true;
+	}
+
+	public static bool applyHealthPotion(GameObject button) {
+		HealthComponent playerHealth = GameObject.Find("NinjaContainer").GetComponent<EnumExtension.WarriorAnimation>().Health;
+		if ( playerHealth.CurrentHealth == playerHealth.MaxHealth ) {
+			return false;
+		}
+		playerHealth.CurrentHealth += 50;
+		if ( playerHealth.MaxHealth < playerHealth.CurrentHealth ) {
+			playerHealth.CurrentHealth = playerHealth.MaxHealth;
+		}
 		UIManager.removeButtonFromInventory(button);
 		return true;
 	}

@@ -30,38 +30,37 @@ public class ActionInspectorScript : MonoBehaviour {
 	}
 
 	public void AddButton(GameObject go, int x, int y){
-		if(!go){
+		if ( !go ) {
 			return;
 		}
-		if(x < xSlots && y <ySlots && x >=0 && y>=0){
+
+		if ( x < xSlots && y < ySlots && x >= 0 && y >= 0 ) {
 			buttons[x,y] = go;
 		}
 
-		RectTransform butRt = go.GetComponent<RectTransform>();
 		go.SetActive(true);
 		go.transform.SetParent(gameObject.transform);
-		go.transform.localPosition = new Vector3(0f,0f,0f);
-		go.transform.localScale = new Vector3(0.9f,0.9f,0.9f);
-		//go.transform.localPosition += new Vector3(iconWidth/1.2f + iconWidth*(x)*1.1f,-iconHeight/1.2f -iconHeight*(y)*1.1f,0f);
-		go.transform.localPosition = new Vector3 (-iconWidth*(4-x)/1.05f, iconHeight*(3-y),0f);
+		go.transform.localPosition = new Vector3(0f, 0f, 0f);
+		go.transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+		go.transform.localPosition = new Vector3(-iconWidth * (4 - x) / 1.05f, iconHeight * (3 - y), 0f);
 	}	
 
 	public void AddAllButtons(GameObject[,] array){
-		if(array == null){
-			/*it happens with enemies*/
+		if ( array == null ) {
+			// it happens with enemies
 			return;
 		}
-		for(int i = 0; i < xSlots; i++){
-			for(int j = 0; j < ySlots; j++){
-				AddButton(array[i,j],i,j);
+		for ( int i = 0; i < xSlots; i++ ) {
+			for ( int j = 0; j < ySlots; j++ ) {
+				AddButton(array[i,j], i, j);
 			}
 		}
 	}
 
 	public void ResetButtons(){
-		for(int i = 0; i < xSlots; i++){
-			for(int j = 0; j < ySlots; j++){
-				if(buttons[i,j] != null){
+		for ( int i = 0; i < xSlots; i++ ) {
+			for ( int j = 0; j < ySlots; j++ ) {
+				if ( buttons[i,j] != null ) {
 					buttons[i,j].SetActive(false);
 					buttons[i,j] = null;
 				}
