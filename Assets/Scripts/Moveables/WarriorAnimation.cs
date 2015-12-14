@@ -108,8 +108,8 @@ namespace EnumExtension {
 			experienceComponent = new ExperienceComponent(healthComponent, attackComponent);
 			navComponent = new NavigationComponent(agent, animator);
 
-			healthComponent.MaxHealth = 10;
-			healthComponent.CurrentHealth = 10;
+			healthComponent.MaxHealth = 100;
+			healthComponent.CurrentHealth = 100;
 			maxMana = 50;
 			currentMana = 50;
 			characterName = "Hattori";
@@ -245,6 +245,9 @@ namespace EnumExtension {
 		}
 
 		public void attack(GameObject enemy) {
+			if(enemy == null) {
+				return;
+			}
 			attackComponent.attack(enemy.GetComponent<MonsterScript>().Health);
 			StartCoroutine(startAttackTimer());
 		}

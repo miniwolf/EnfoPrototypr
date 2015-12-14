@@ -28,6 +28,7 @@ public class UIManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		click = null;
+		//gold.text = "100";
 		mCamera = mainCamera.GetComponent<Camera>();
 		itemDescriptionPanel = GameObject.Find("ButtonDescriptionPanel");
 		itemDescriptionText = GameObject.Find("ButtonDescriptionText").GetComponent<Text>();
