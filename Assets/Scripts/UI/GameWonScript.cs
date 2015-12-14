@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class GameWonScript : MonoBehaviour {
@@ -16,6 +17,7 @@ public class GameWonScript : MonoBehaviour {
 
 	public void RestartGame()
 	{
-		Application.LoadLevel("mergeScene");
+		WaveManager.ResetWaves();
+		SceneManager.LoadScene("mergeScene");
 	}
 }

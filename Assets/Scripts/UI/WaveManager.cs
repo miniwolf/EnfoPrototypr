@@ -31,6 +31,11 @@ public class WaveManager : MonoBehaviour {
 		}
 	}
 
+	public static void ResetWaves() {
+		waveCount = 1;
+		isSpawning = true;
+	}
+
 	void Start() {
 		waveText = GetComponentInChildren<Text>();
 	}
@@ -38,15 +43,15 @@ public class WaveManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		waveTime -= Time.deltaTime;
-
 		if ( waveTime > 0 ) {
 			waveText.text = (isSpawning ? "Wave " + waveCount + " - " : "Next wave ") +
 							waveTime.ToString("0") + " s";
 		} else {
 			waveTime = isSpawning ? waveWaitingTime : waveSpawningTime;
 			if ( !isSpawning ) {
-				if ( ++waveCount >= maxWaves ) {
+				if ( ++waveCount >= maxWaves) {
 					waveText.text = "FINAL WAVE";
+					isSpawning = true; // To allow last round boss spawn
 					enabled = false; // Disables the Update() function
 					return;
 				}

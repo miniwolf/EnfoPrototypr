@@ -8,6 +8,7 @@ public class EnemyManager : MonoBehaviour {
 	private float initialHealth = 10f;
 	private float initialSpeed = 5f;
 	private Transform[] spawnPoints = new Transform[2];
+	private static int enemyCountPerWave;
 
 	public GameObject enemy;
 	public GameObject healthBar;
@@ -29,17 +30,29 @@ public class EnemyManager : MonoBehaviour {
 	}
 
 	private IEnumerator spawnUnit() {
-		while (true) {
+		while ( true ) {
 			if ( WaveManager.IsSpawning ) {
 				Spawn();
+				enemyCountPerWave += 2;
+				if (WaveManager.WaveCount == WaveManager.MaxWaves) {
+					// Breaks the spawning after spawning of 2 bosses in the last wave
+					break;
+				}
 				yield return new WaitForSeconds(spawnTime);
 			} else {
-				yield return new WaitUntil(new System.Func<bool>(IsSpwaning));
+				enemyCountPerWave = 0;
+				yield return new WaitUntil(new System.Func<bool>(IsSpawning));
 			}
 		}
 	}
 
-	private bool IsSpwaning() {
+	public static int EnemyCountPerWave {
+		get {
+			return enemyCountPerWave;
+		}
+	}
+
+	private bool IsSpawning() {
 		return WaveManager.IsSpawning;
 	}
 
@@ -62,9 +75,8 @@ public class EnemyManager : MonoBehaviour {
 			break;
 		case 4:
 			// Final wave
-			monster.GetComponent<Transform>().transform.localScale *= 1.9f;
+			monster.GetComponent<Transform>().transform.localScale *= 1.6f;
 			monster.GetComponent<Renderer>().material.color = Color.red;
-			CancelInvoke();
 			break;
 		}
 	}

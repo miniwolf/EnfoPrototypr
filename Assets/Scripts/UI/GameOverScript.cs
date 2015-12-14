@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class GameOverScript : MonoBehaviour {
@@ -12,9 +13,10 @@ public class GameOverScript : MonoBehaviour {
 		restartButton = restartButton.GetComponent<Button>();
 		restartButton.enabled = true;
 	}
-	
+
 	public void RestartGame()
 	{
-		Application.LoadLevel("mergeScene");
+		WaveManager.ResetWaves();
+		SceneManager.LoadScene("mergeScene");
 	}
 }
