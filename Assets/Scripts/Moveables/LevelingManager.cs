@@ -2,8 +2,8 @@
 using System.Collections;
 
 public class LevelingManager : MonoBehaviour {
-	private const float healthMultiplier = 1.1f;
-	private const float damageMultiplier = 1.05f;
+	private const float healthMultiplier = 1.15f;
+	private const float damageMultiplier = 1.1f;
 	private const float stunTimeMultiplier = 1.05f;
 	private const float seeRangeMultiplier = 1f;
 	private const float attackRangeMultiplier = 1f;

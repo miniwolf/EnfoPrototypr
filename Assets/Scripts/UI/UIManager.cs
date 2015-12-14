@@ -40,7 +40,7 @@ public class UIManager : MonoBehaviour {
 
 		click = GameObject.Find("NinjaContainer").GetComponent<WarriorAnimation>();
 		click.SetSelectedCircle(true);
-		healthText.text = click.getCurrentHealth() + "/" + click.getMaxHealth();
+		healthText.text = (int)click.getCurrentHealth() + "/" + (int)click.getMaxHealth();
 		manaText.text = click.getCurrentMana() + "/" + click.getMaxMana();
 		name.text = click.getName();
 		picture.sprite = click.getPicure();
@@ -110,11 +110,16 @@ public class UIManager : MonoBehaviour {
 	}
 
 	public void updateCharacterInfo() {
-		healthText.text = click.getCurrentHealth() + "/" + click.getMaxHealth();
+		healthText.text = (int)click.getCurrentHealth() + "/" +(int) click.getMaxHealth();
 		manaText.text = click.getCurrentMana() + "/" + click.getMaxMana();
 		experienceBar.maxValue = click.getMaxExp();
 		experienceBar.value = click.getCurrentExp();
 		levelAndClassText.text = "Level " +click.getCurrentLevel() + " " + click.getClassName();
+		if ( click is WarriorAnimation ) {
+			damageText.text = "Damage: " + (int)((WarriorAnimation) click).Attack.Damage;
+		} else if ( click is MonsterScript ) {
+			damageText.text = "Damage: " + (int)((MonsterScript) click).Attack.Damage;
+		}
 	}
 
 	public static void showDescription(string desc, bool isActionButton, long price){

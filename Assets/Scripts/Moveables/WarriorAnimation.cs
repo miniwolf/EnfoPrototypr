@@ -245,9 +245,10 @@ namespace EnumExtension {
 		}
 
 		public void attack(GameObject enemy) {
-			/*if(enemy == null) {
+			Debug.Log("Try getting swarmed");
+			if(enemy == null) {
 				return;
-			}*/
+			}
 			attackComponent.attack(enemy.GetComponent<MonsterScript>().Health);
 			StartCoroutine(startAttackTimer());
 		}
