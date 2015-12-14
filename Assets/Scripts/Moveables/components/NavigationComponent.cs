@@ -5,6 +5,7 @@ public class NavigationComponent {
 	private NavMeshAgent agent;
 	private Animator animator;
 	private float seeRange = 7;
+	private bool DoubleCheck = false;
 
 	public float SeeRange {
 		get {
@@ -33,9 +34,17 @@ public class NavigationComponent {
 	}
 
 	public bool ReachedDestination() {
-		if ( !agent.pathPending ) {
-			return agent.pathStatus == NavMeshPathStatus.PathComplete && !agent.hasPath;
+		if ( !agent.pathPending && !agent.hasPath && agent.pathStatus == NavMeshPathStatus.PathComplete ) {
+			if ( agent.remainingDistance <= agent.stoppingDistance ) {
+				if ( !DoubleCheck ) {
+					DoubleCheck = true;
+				} else {
+					DoubleCheck = false;
+					return true;
+				}
+			}
 		}
+
 		return false;
 	}
 

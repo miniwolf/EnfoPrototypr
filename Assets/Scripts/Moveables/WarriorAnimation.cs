@@ -166,7 +166,7 @@ namespace EnumExtension {
 			}
 			if ( checkType(typeof(ATTACKMOVE)) || checkType(typeof(MOVE)) ) {
 				if ( navComponent.ReachedDestination() ) {
-					stop();
+					navComponent.Stop();
 					currentState = new IDLE();
 				}
 			}
@@ -245,9 +245,9 @@ namespace EnumExtension {
 		}
 
 		public void attack(GameObject enemy) {
-			if(enemy == null) {
+			/*if(enemy == null) {
 				return;
-			}
+			}*/
 			attackComponent.attack(enemy.GetComponent<MonsterScript>().Health);
 			StartCoroutine(startAttackTimer());
 		}
